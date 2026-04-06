@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>반구대 암각화</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;600&family=Noto+Sans+KR:wght@200;300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0C10; --bg2:#05161A; --bg3:#081c22;
+  --gold:#C9A66B; --gold2:#e0be88; --gold3:#f5e4b8;
+  --tp:#e8e2d4; --tp2:#b0a890; --mu:#5a5848; --di:#2a2820;
+  --border:rgba(201,166,107,.1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-snap-type:y mandatory;overflow-y:scroll;scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--tp);font-family:'Noto Serif KR',serif;font-weight:300;overflow-x:hidden;cursor:none;}
+
+/* 커서 */
+#cur{position:fixed;width:7px;height:7px;border-radius:50%;background:var(--gold);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
+#cur2{position:fixed;width:24px;height:24px;border-radius:50%;border:1px solid rgba(201,166,107,.3);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .09s,top .09s,width .22s,height .22s;}
+
+/* NAV */
+#nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;height:56px;
+  padding:0 48px;display:flex;align-items:center;justify-content:space-between;
+  transition:background .3s;
+}
+#nav.on{background:rgba(11,12,16,.96);border-bottom:1px solid var(--border);}
+.nl{font-size:13px;font-weight:400;letter-spacing:.06em;color:var(--tp);}
+.nr{display:flex;gap:0;list-style:none;align-items:center;}
+.nr a{font-size:10px;font-weight:200;color:var(--mu);letter-spacing:.14em;text-decoration:none;padding:0 12px;transition:color .2s;}
+.nr a:hover,.nr a.on{color:var(--gold);}
+.nav-cta{
+  margin-left:16px;padding:7px 18px;
+  background:rgba(201,166,107,.12);border:1px solid rgba(201,166,107,.3);
+  font-family:'Noto Serif KR',serif;font-size:10px;font-weight:200;
+  color:var(--gold);letter-spacing:.14em;cursor:none;transition:all .25s;
+}
+.nav-cta:hover{background:rgba(201,166,107,.22);}
+
+/* 풀스크린 섹션 */
+.fs{scroll-snap-align:start;min-height:100vh;width:100%;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;}
+
+/* ═══════════════════════
+   S01 — HERO
+═══════════════════════ */
+#s1{background:var(--bg);}
+.s1-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(5,22,26,.8) 0%,transparent 70%);}
+.s1-grid-tex{position:absolute;inset:0;opacity:.018;background:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(201,166,107,1) 59px,rgba(201,166,107,1) 60px),repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(201,166,107,.6) 79px,rgba(201,166,107,.6) 80px);}
+.s1-inner{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;padding:80px 40px 90px;}
+.s1-kicker{font-size:10px;font-weight:200;letter-spacing:.32em;color:rgba(201,166,107,.5);margin-bottom:28px;animation:fu 1.2s ease .1s both;}
+.s1-brush{margin-bottom:24px;animation:fu 1.8s cubic-bezier(.16,1,.3,1) .3s both;}
+.s1-brush img{width:min(500px,78vw);filter:brightness(1.05) drop-shadow(0 0 60px rgba(201,166,107,.12));}
+/* 3장 이미지 그리드 */
+.s1-photos{
+  display:flex;gap:3px;margin-bottom:20px;width:min(560px,80vw);
+  animation:fu 1s ease .75s both;
+}
+.s1-photo-main{
+  flex:1.8;aspect-ratio:1/.85;overflow:hidden;
+  background:rgba(5,22,26,.4);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+}
+.s1-photo-stack{flex:1;display:flex;flex-direction:column;gap:3px;}
+.s1-photo-sm{
+  flex:1;overflow:hidden;
+  background:rgba(5,22,26,.4);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+}
+.s1-photo-main svg,.s1-photo-sm svg{width:100%;height:100%;}
+.s1-tagline{font-size:14px;font-weight:300;color:var(--gold);letter-spacing:.16em;margin-bottom:6px;animation:fu 1s ease .9s both;}
+.s1-sub{font-size:11px;font-weight:200;color:var(--mu);letter-spacing:.1em;animation:fu 1s ease 1.1s both;}
+/* 스크롤 */
+.s1-scroll{position:absolute;bottom:72px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:7px;animation:fu 1s ease 1.5s both;cursor:pointer;}
+.s1-scroll-line{width:1px;height:44px;background:linear-gradient(to bottom,var(--gold),transparent);animation:lp 2s ease infinite;}
+@keyframes lp{0%,100%{opacity:.3;transform:scaleY(.6);}50%{opacity:1;transform:scaleY(1);}}
+.s1-scroll span{font-size:8px;font-weight:200;letter-spacing:.24em;color:var(--mu);}
+/* 스탯 바 */
+.s1-stats{
+  position:absolute;bottom:0;left:0;right:0;z-index:3;
+  display:flex;background:rgba(11,12,16,.8);backdrop-filter:blur(12px);
+  border-top:1px solid var(--border);
+}
+.ss{flex:1;padding:14px 0;text-align:center;border-right:1px solid var(--border);}
+.ss:last-child{border-right:none;}
+.ssn{display:block;font-size:22px;font-weight:600;color:var(--gold);line-height:1;letter-spacing:-.01em;}
+.ssl{display:block;font-size:8px;font-weight:200;letter-spacing:.18em;color:var(--mu);margin-top:4px;}
+
+@keyframes fu{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+
+/* ═══════════════════════
+   S02 — 소개
+═══════════════════════ */
+#s2{background:linear-gradient(160deg,var(--bg2) 0%,var(--bg) 100%);}
+.s2-inner{max-width:1060px;margin:0 auto;padding:0 64px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;min-height:100vh;}
+.s2-num{font-size:88px;font-weight:600;color:rgba(201,166,107,.06);line-height:1;letter-spacing:-.03em;margin-bottom:-12px;display:block;}
+.s2-lbl{font-size:9px;font-weight:200;letter-spacing:.28em;color:rgba(201,166,107,.38);margin-bottom:16px;display:block;}
+.s2-title{font-size:clamp(28px,3.5vw,42px);font-weight:600;color:var(--tp);line-height:1.22;margin-bottom:18px;}
+.s2-title em{color:var(--gold);font-style:normal;}
+.s2-rule{width:28px;height:1px;background:rgba(201,166,107,.38);margin:18px 0;}
+.s2-body{font-size:12.5px;font-weight:200;color:var(--mu);line-height:2.3;margin-bottom:22px;}
+.s2-quote{border-left:1.5px solid rgba(201,166,107,.28);padding:4px 0 4px 18px;margin-bottom:22px;}
+.s2-quote q{font-size:13px;font-weight:200;color:var(--tp2);line-height:2;font-style:italic;quotes:none;}
+.s2-quote cite{font-size:9px;letter-spacing:.12em;color:rgba(201,166,107,.38);display:block;margin-top:5px;}
+/* 탭 */
+.s2-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:0;}
+.s2t{padding:8px 14px;background:none;border:none;border-bottom:2px solid transparent;font-family:'Noto Serif KR',serif;font-size:10px;font-weight:200;color:var(--mu);letter-spacing:.12em;cursor:none;transition:all .2s;}
+.s2t.on{border-bottom-color:var(--gold);color:var(--gold);}
+.s2-tab-content{padding:18px 0;display:none;flex-direction:column;gap:12px;}
+.s2-tab-content.on{display:flex;}
+.s2-tab-item{display:flex;gap:10px;}
+.sti-dot{width:4px;height:4px;border-radius:50%;background:rgba(201,166,107,.38);flex-shrink:0;margin-top:8px;}
+.sti-t{font-size:11.5px;font-weight:400;color:var(--tp2);margin-bottom:2px;}
+.sti-b{font-size:11px;font-weight:200;color:var(--mu);line-height:1.8;}
+/* 우측 수치 */
+.s2-right{position:relative;height:460px;}
+.s2-fig{position:absolute;transition:transform .3s;}
+.s2-fig:hover{transform:translateY(-5px) !important;}
+.s2fn{display:block;font-size:46px;font-weight:600;color:var(--gold);line-height:1;letter-spacing:-.02em;}
+.s2fl{display:block;font-size:8px;font-weight:200;letter-spacing:.2em;color:var(--mu);margin-top:3px;}
+.s2fd{font-size:10.5px;font-weight:200;color:var(--di);margin-top:6px;line-height:1.7;max-width:150px;}
+
+/* ═══════════════════════
+   S03 — 해독 (글로우)
+═══════════════════════ */
+#s3{background:#06060a;position:relative;}
+#gc{position:absolute;inset:0;pointer-events:none;z-index:2;}
+#gscene{position:absolute;inset:0;z-index:1;}
+.glyph{position:absolute;transform:translate(-50%,-50%);cursor:none;}
+.glyph svg{display:block;filter:brightness(.07);transition:filter .5s ease;}
+.glyph.hover svg{filter:brightness(.85) drop-shadow(0 0 18px rgba(201,166,107,.65));}
+.glyph.solved svg{filter:brightness(1.05) drop-shadow(0 0 22px rgba(201,166,107,.85)) drop-shadow(0 0 55px rgba(201,166,107,.38));animation:spulse 3s ease-in-out infinite;}
+@keyframes spulse{0%,100%{filter:brightness(1) drop-shadow(0 0 18px rgba(201,166,107,.65));}50%{filter:brightness(1.12) drop-shadow(0 0 34px rgba(201,166,107,.95));}}
+/* 힌트 */
+#g-hint{position:absolute;top:28px;left:50%;transform:translateX(-50%);z-index:5;font-size:9px;font-weight:200;letter-spacing:.28em;color:rgba(201,166,107,.22);pointer-events:none;animation:hf 3s ease infinite;}
+@keyframes hf{0%,100%{opacity:.35}50%{opacity:.85}}
+#g-hint.off{opacity:0;transition:opacity .5s;}
+#g-pr{position:absolute;top:28px;right:36px;z-index:5;font-size:9px;font-weight:200;letter-spacing:.16em;color:rgba(201,166,107,.25);pointer-events:none;}
+/* 퀴즈 팝업 */
+#qpop{position:absolute;z-index:20;width:272px;opacity:0;pointer-events:none;transform:translateY(8px) scale(.97);transition:opacity .22s,transform .22s;}
+#qpop.show{opacity:1;pointer-events:all;transform:none;}
+.qp{background:rgba(10,10,18,.97);border:1px solid rgba(201,166,107,.22);box-shadow:0 12px 48px rgba(0,0,0,.9);}
+.qp-hd{padding:10px 14px;border-bottom:1px solid rgba(201,166,107,.1);display:flex;justify-content:space-between;align-items:center;}
+.qp-tag{font-size:8px;font-weight:200;letter-spacing:.2em;color:rgba(201,166,107,.45);}
+.qp-x{width:17px;height:17px;border-radius:50%;background:rgba(201,166,107,.07);border:none;color:rgba(201,166,107,.45);font-size:9px;cursor:none;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.qp-x:hover{background:rgba(201,166,107,.16);}
+.qp-q{padding:12px 14px 10px;font-size:11.5px;font-weight:300;color:rgba(232,220,200,.82);line-height:1.65;border-bottom:1px solid rgba(201,166,107,.07);}
+.qp-list{padding:3px 0;}
+.qpc{width:100%;padding:9px 14px;display:flex;align-items:center;gap:9px;background:none;border:none;font-family:'Noto Serif KR',serif;font-size:11px;font-weight:200;color:rgba(232,220,200,.52);letter-spacing:.04em;cursor:none;transition:all .16s;text-align:left;border-bottom:1px solid rgba(255,255,255,.025);position:relative;overflow:hidden;}
+.qpc:last-child{border-bottom:none;}
+.qpc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);opacity:0;transition:opacity .16s;}
+.qpc:hover{background:rgba(201,166,107,.07);color:rgba(232,220,200,.9);}
+.qpc:hover::before{opacity:.65;}
+.qpc .ci{font-size:9px;font-weight:200;letter-spacing:.1em;color:rgba(201,166,107,.28);min-width:14px;}
+.qpc.correct{background:rgba(74,154,88,.12)!important;color:#7acc88!important;pointer-events:none;}
+.qpc.correct::before{background:#4a9a58;opacity:1!important;}
+.qpc.correct .ci{color:#4a9a58!important;}
+.qpc.wrong{color:rgba(200,80,80,.45)!important;text-decoration:line-through;pointer-events:none;}
+.qpc.disabled{pointer-events:none;}
+.qp-fb{padding:0 14px;max-height:0;overflow:hidden;transition:max-height .3s,padding .3s;font-size:10px;font-weight:200;color:rgba(201,166,107,.5);line-height:1.8;}
+.qp-fb.show{max-height:90px;padding:9px 14px 12px;}
+/* 계열 완성 오버레이 */
+#cover{position:absolute;inset:0;z-index:30;display:flex;opacity:0;pointer-events:none;transition:opacity .55s ease;}
+#cover.show{opacity:1;pointer-events:all;}
+.cv-l{flex:1;position:relative;overflow:hidden;background:rgba(5,5,9,.94);display:flex;align-items:center;justify-content:center;}
+.cv-r{width:340px;background:rgba(7,7,13,.97);border-left:1px solid rgba(201,166,107,.12);display:flex;flex-direction:column;justify-content:center;padding:44px 36px;}
+.cv-ey{font-size:9px;font-weight:200;letter-spacing:.3em;color:rgba(201,166,107,.4);margin-bottom:12px;}
+.cv-ti{font-size:clamp(24px,2.8vw,34px);font-weight:600;color:#e8dcc8;line-height:1.3;margin-bottom:6px;}
+.cv-ti em{color:var(--gold);font-style:normal;}
+.cv-rule{width:24px;height:1px;background:rgba(201,166,107,.3);margin:14px 0;}
+.cv-bd{font-size:11.5px;font-weight:200;color:rgba(155,148,128,.9);line-height:2.1;margin-bottom:26px;}
+.cv-btn{padding:10px 0;background:none;border:none;border-bottom:1px solid rgba(201,166,107,.28);font-family:'Noto Serif KR',serif;font-size:11px;font-weight:200;color:var(--gold);letter-spacing:.18em;cursor:none;transition:letter-spacing .25s;text-align:left;}
+.cv-btn:hover{letter-spacing:.26em;}
+/* 하단 단서 바 */
+#gbar{
+  position:absolute;bottom:0;left:0;right:0;z-index:10;height:54px;
+  background:rgba(6,6,10,.93);backdrop-filter:blur(14px);
+  border-top:1px solid rgba(201,166,107,.09);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;
+}
+.gb-groups{display:flex;gap:28px;}
+.gbg{display:flex;align-items:center;gap:7px;}
+.gbl{font-size:9px;font-weight:200;letter-spacing:.15em;color:rgba(201,166,107,.32);}
+.gbd-wrap{display:flex;gap:4px;}
+.gbd{width:7px;height:7px;border-radius:50%;background:rgba(201,166,107,.1);border:1px solid rgba(201,166,107,.18);transition:all .4s;}
+.gbd.done{background:var(--gold);border-color:var(--gold);box-shadow:0 0 6px rgba(201,166,107,.45);}
+.gbd.clear{background:#4a9a58;border-color:#4a9a58;box-shadow:0 0 8px rgba(74,154,88,.55);}
+.gb-badge{font-size:8px;font-weight:200;letter-spacing:.1em;color:#4a9a58;opacity:0;transition:opacity .4s;}
+.gb-badge.show{opacity:1;}
+#gnext{padding:7px 16px;background:transparent;border:1px solid rgba(201,166,107,.18);font-family:'Noto Serif KR',serif;font-size:10px;font-weight:200;color:rgba(201,166,107,.32);letter-spacing:.14em;cursor:none;transition:all .3s;pointer-events:none;}
+#gnext.on{pointer-events:all;border-color:rgba(201,166,107,.45);color:var(--gold);}
+
+/* 애니메이션 CSS */
+.whale-swim{animation:wswim 6s ease-in-out infinite;transform-origin:center;}
+@keyframes wswim{0%{transform:translate(-80px,0) scaleX(1);}46%{transform:translate(100px,12px) scaleX(1);}50%{transform:translate(100px,12px) scaleX(-1);}96%{transform:translate(-80px,0) scaleX(-1);}100%{transform:translate(-80px,0) scaleX(1);}}
+.wave1{animation:wv1 5s ease-in-out infinite;}.wave2{animation:wv2 5s ease-in-out infinite 1s;}
+@keyframes wv1{0%,100%{transform:translateX(0);}50%{transform:translateX(-18px);}}
+@keyframes wv2{0%,100%{transform:translateX(0);}50%{transform:translateX(14px);}}
+.bub{animation:bub linear infinite;}
+@keyframes bub{0%{transform:translateY(0);opacity:.5;}100%{transform:translateY(-110px);opacity:0;}}
+.tiger-walk{animation:twalk 7s ease-in-out infinite;transform-origin:center;}
+@keyframes twalk{0%,100%{transform:translateX(-50px);}50%{transform:translateX(60px);}}
+.leaf-sw{animation:lsw 3.5s ease-in-out infinite;transform-origin:center bottom;}
+@keyframes lsw{0%,100%{transform:rotate(-10deg);}50%{transform:rotate(10deg);}}
+.h-wind{animation:hwind 4s ease-in-out infinite;transform-origin:195px 128px;}
+@keyframes hwind{0%,100%{transform:rotate(0);}28%{transform:rotate(-18deg);}55%{transform:rotate(8deg);}}
+.sp-fly{animation:sfly 4s ease-in-out infinite;}
+@keyframes sfly{0%,38%{transform:translate(0,0);opacity:0;}42%{opacity:1;}78%{transform:translate(130px,-65px);opacity:1;}85%{opacity:0;}100%{transform:translate(130px,-65px);opacity:0;}}
+
+/* ═══════════════════════
+   S04 — 단서 기록 (인터랙티브)
+═══════════════════════ */
+#s4{background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);}
+.s4-inner{max-width:1060px;margin:0 auto;padding:80px 64px;min-height:100vh;display:flex;flex-direction:column;justify-content:center;}
+.sh{margin-bottom:40px;}
+.sh-num{font-size:72px;font-weight:600;color:rgba(201,166,107,.06);line-height:1;letter-spacing:-.03em;margin-bottom:-8px;display:block;}
+.sh-lbl{font-size:9px;font-weight:200;letter-spacing:.28em;color:rgba(201,166,107,.35);margin-bottom:12px;display:block;}
+.sh-tit{font-size:clamp(26px,3.2vw,38px);font-weight:600;color:var(--tp);line-height:1.22;}
+.sh-tit em{color:var(--gold);font-style:normal;}
+.sh-rule{width:26px;height:1px;background:rgba(201,166,107,.35);margin:14px 0;}
+.sh-body{font-size:12px;font-weight:200;color:var(--mu);line-height:2.1;max-width:460px;}
+
+/* 챕터 탭 */
+.ch-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:32px;}
+.cht{padding:10px 20px;background:none;border:none;border-bottom:2px solid transparent;font-family:'Noto Serif KR',serif;font-size:10px;font-weight:200;color:var(--mu);letter-spacing:.14em;cursor:none;transition:all .2s;}
+.cht.on{border-bottom-color:var(--gold);color:var(--gold);}
+.ch-content{display:none;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+.ch-content.on{display:grid;}
+
+/* 드래그 카드 */
+.drag-card,.tool-card{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 10px;cursor:grab;border-bottom:1px solid rgba(201,166,107,.14);transition:all .2s;user-select:none;}
+.drag-card span,.tool-card span{font-size:8px;font-weight:200;color:rgba(201,166,107,.45);letter-spacing:.08em;white-space:nowrap;}
+.drag-card:hover,.tool-card:hover{border-bottom-color:var(--gold);}
+.drop-zone{min-height:78px;padding:10px;border:1px dashed rgba(201,166,107,.14);transition:border-color .2s,background .2s;}
+.drop-zone.over{border-color:rgba(201,166,107,.4);background:rgba(201,166,107,.04);}
+.dz-lbl{font-size:8px;font-weight:200;letter-spacing:.16em;color:rgba(201,166,107,.28);margin-bottom:6px;}
+.dz-chip{display:flex;align-items:center;gap:5px;padding:3px 8px;border-bottom:1px solid rgba(201,166,107,.18);font-size:9px;font-weight:200;color:rgba(201,166,107,.55);cursor:pointer;transition:color .2s;}
+.dz-chip:hover{color:#c05050;}
+.hz{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;border:1px dashed rgba(201,166,107,.12);transition:all .25s;min-height:130px;justify-content:center;}
+.hz.over{border-color:rgba(201,166,107,.4);background:rgba(201,166,107,.04);}
+.hz.set{border-color:rgba(201,166,107,.24);}
+.hzl{font-size:8px;font-weight:200;letter-spacing:.14em;color:rgba(201,166,107,.32);}
+.hzt{font-size:9px;font-weight:200;color:rgba(201,166,107,.28);letter-spacing:.05em;text-align:center;line-height:1.6;}
+.hzt.s{color:var(--gold);}
+.scene-box{padding:14px;border:1px solid rgba(201,166,107,.1);background:rgba(5,22,26,.3);min-height:80px;transition:all .5s;margin-top:10px;}
+.scene-lbl{font-size:8px;font-weight:200;letter-spacing:.2em;color:rgba(201,166,107,.24);margin-bottom:6px;}
+.scene-txt{font-size:11px;font-weight:200;color:rgba(160,152,128,.45);line-height:1.8;font-style:italic;}
+.hunt-box{padding:14px;border:1px solid rgba(201,166,107,.1);background:rgba(5,22,26,.3);min-height:70px;transition:all .6s;margin-top:12px;}
+.s4-reset{margin-top:8px;padding:6px 0;background:none;border:none;border-bottom:1px solid rgba(201,166,107,.1);font-family:'Noto Serif KR',serif;font-size:9px;font-weight:200;color:rgba(201,166,107,.28);letter-spacing:.14em;cursor:none;transition:color .2s;text-align:left;}
+.s4-reset:hover{color:var(--gold);}
+/* 바다 챕터 */
+.sea-glyphs{padding:20px;background:rgba(5,22,26,.3);border:1px solid rgba(201,166,107,.08);display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;}
+
+/* ═══════════════════════
+   S05 — 결론
+═══════════════════════ */
+#s5{background:var(--bg2);}
+.s5-inner{max-width:960px;margin:0 auto;padding:0 64px;min-height:100vh;display:flex;flex-direction:column;justify-content:center;text-align:center;}
+.s5-kicker{font-size:9px;font-weight:200;letter-spacing:.3em;color:rgba(201,166,107,.35);margin-bottom:18px;display:block;}
+.s5-title{font-size:clamp(30px,4vw,50px);font-weight:600;color:var(--tp);line-height:1.22;margin-bottom:20px;}
+.s5-rule{width:28px;height:1px;background:rgba(201,166,107,.35);margin:0 auto 36px;}
+.s5-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--border);margin-bottom:52px;}
+.s5c{padding:28px 22px;border-right:1px solid var(--border);}
+.s5c:last-child{border-right:none;}
+.s5c-num{font-size:8px;font-weight:200;letter-spacing:.22em;color:rgba(201,166,107,.38);margin-bottom:10px;}
+.s5c-t{font-size:14px;font-weight:600;color:var(--tp);margin-bottom:8px;}
+.s5c-b{font-size:11px;font-weight:200;color:var(--tp2);line-height:1.9;}
+.s5-quote{font-size:clamp(14px,1.8vw,18px);font-weight:300;color:var(--tp2);line-height:1.9;font-style:italic;letter-spacing:.04em;margin-bottom:14px;max-width:640px;margin-left:auto;margin-right:auto;}
+.s5-cite{font-size:9px;font-weight:200;letter-spacing:.2em;color:var(--mu);}
+
+/* ═══════════════════════
+   S06 — AR 추리렌즈
+═══════════════════════ */
+#s6{background:linear-gradient(180deg,var(--bg2) 0%,var(--bg3) 100%);}
+.s6-inner{max-width:1060px;margin:0 auto;padding:0 64px;display:grid;grid-template-columns:1fr 260px;gap:80px;align-items:center;min-height:100vh;}
+/* 폰 */
+.phone{width:240px;border-radius:38px;padding:8px;background:linear-gradient(145deg,rgba(201,166,107,.07),rgba(5,22,26,.2));border:1px solid rgba(201,166,107,.16);box-shadow:0 28px 65px rgba(0,0,0,.8);}
+.psc{border-radius:30px;overflow:hidden;background:#050a06;aspect-ratio:9/18;position:relative;display:flex;align-items:center;justify-content:center;}
+.pbg{position:absolute;inset:0;background:linear-gradient(155deg,#0c180c,#050a05);}
+.pglyph{position:relative;z-index:2;}
+.pglyph svg{filter:drop-shadow(0 0 14px rgba(201,166,107,.55));animation:ag 3s ease-in-out infinite;}
+@keyframes ag{0%,100%{filter:drop-shadow(0 0 9px rgba(201,166,107,.45))}50%{filter:drop-shadow(0 0 22px rgba(201,166,107,.85))}}
+.pscan{position:absolute;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(201,166,107,.4),transparent);animation:sc 3s linear infinite;}
+@keyframes sc{0%{top:10%}100%{top:90%}}
+.pcors{position:absolute;inset:8px;}
+.pc{position:absolute;width:11px;height:11px;border-color:rgba(201,166,107,.6);border-style:solid;}
+.pc.tl{top:0;left:0;border-width:1.5px 0 0 1.5px}.pc.tr{top:0;right:0;border-width:1.5px 1.5px 0 0}
+.pc.bl{bottom:0;left:0;border-width:0 0 1.5px 1.5px}.pc.br{bottom:0;right:0;border-width:0 1.5px 1.5px 0}
+.pnot{position:absolute;top:0;left:50%;transform:translateX(-50%);width:54px;height:6px;background:#050a05;border-radius:0 0 5px 5px;z-index:5;}
+.feat{display:flex;gap:12px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--border);}
+.feat:first-child{border-top:1px solid var(--border);}
+.fd{width:4px;height:4px;border-radius:50%;background:rgba(201,166,107,.38);flex-shrink:0;margin-top:8px;}
+.ft{font-size:12.5px;font-weight:400;color:var(--tp2);margin-bottom:3px;}
+.fb{font-size:11px;font-weight:200;color:var(--mu);line-height:1.8;}
+
+/* ═══════════════════════
+   S07 — 실시간 수위
+═══════════════════════ */
+#s7{background:linear-gradient(180deg,var(--bg3) 0%,var(--bg) 100%);}
+.s7-inner{max-width:1060px;margin:0 auto;padding:0 64px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;min-height:100vh;padding-top:90px;padding-bottom:90px;}
+.gw{height:200px;display:flex;gap:10px;margin-bottom:20px;}
+.gcliff{flex:1;position:relative;border:1px solid rgba(201,166,107,.1);background:rgba(5,22,26,.4);overflow:hidden;}
+.gwt{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(5,80,60,.35),rgba(5,40,40,.1));transition:height 1s ease;border-top:1px solid rgba(201,166,107,.18);}
+.gshim{position:absolute;top:0;left:-100%;width:100%;height:2px;background:linear-gradient(to right,transparent,rgba(201,166,107,.3),transparent);animation:gsh 3s linear infinite;}
+@keyframes gsh{0%{left:-100%}100%{left:100%}}
+.gglyph2{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:3;}
+.gscale{display:flex;flex-direction:column;justify-content:space-between;height:100%;font-size:9px;font-weight:200;color:var(--mu);padding:4px 0;}
+.gsr{display:flex;align-items:center;gap:4px;}
+.gsr::before{content:'';width:5px;height:1px;background:rgba(201,166,107,.14);}
+.dam-n{font-size:50px;font-weight:600;color:var(--gold);line-height:1;letter-spacing:-.03em;display:block;}
+.dam-u{font-size:13px;font-weight:200;color:var(--mu);}
+.dam-st{font-size:10px;font-weight:200;letter-spacing:.1em;margin-bottom:16px;display:block;}
+.st-ok{color:#4a9a58;}.st-warn{color:var(--gold);}.st-bad{color:#c05050;}
+.sim-lbl{font-size:8px;font-weight:200;letter-spacing:.18em;color:rgba(201,166,107,.38);display:block;margin-bottom:7px;}
+input[type=range].dsl{width:100%;-webkit-appearance:none;height:1px;background:linear-gradient(to right,var(--gold) 60%,rgba(201,166,107,.1) 60%);outline:none;cursor:none;}
+input[type=range].dsl::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--gold);border:2px solid var(--bg);box-shadow:0 0 8px rgba(201,166,107,.5);cursor:none;}
+.clist{display:flex;flex-direction:column;}
+.citem{display:flex;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid rgba(201,166,107,.07);}
+.citem:first-child{border-top:1px solid rgba(201,166,107,.07);}
+.cico{width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ct{font-size:11.5px;font-weight:400;color:var(--tp2);margin-bottom:2px;}
+.cd{font-size:10px;font-weight:200;color:var(--mu);line-height:1.6;}
+.cv2{font-size:12px;font-weight:400;margin-top:3px;}
+
+/* ═══════════════════════
+   S08 — 살물 단서 추적
+═══════════════════════ */
+#s8{background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);}
+.s8-inner{max-width:760px;margin:0 auto;padding:80px 64px 60px;min-height:100vh;display:flex;flex-direction:column;justify-content:center;}
+/* 흐름 안내 */
+.flow-bar{display:flex;align-items:center;gap:0;margin-bottom:32px;font-size:9px;font-weight:200;letter-spacing:.1em;color:rgba(201,166,107,.32);}
+.flow-bar span.on{padding:5px 12px;border:1px solid rgba(201,166,107,.25);color:var(--gold);}
+.flow-bar span:not(.on){padding:5px 10px;}
+/* 스텝 바 */
+.step-bar{display:flex;align-items:center;gap:5px;margin-bottom:32px;}
+.sdot{width:27px;height:27px;border-radius:50%;background:rgba(201,166,107,.06);border:1px solid rgba(201,166,107,.14);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:200;color:rgba(201,166,107,.28);flex-shrink:0;transition:all .35s;}
+.sdot.on{background:rgba(201,166,107,.18);border-color:var(--gold);color:var(--gold);}
+.sdot.done{background:rgba(74,154,88,.15);border-color:#4a9a58;color:#4a9a58;}
+.sline{flex:1;height:1px;background:rgba(201,166,107,.1);}
+/* 단서 카드 */
+.clue-screen{animation:fu .32s ease;}
+.clue-card{border:1px solid rgba(201,166,107,.14);background:rgba(5,22,26,.3);padding:30px;}
+.cc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.cc-badge{font-size:9px;font-weight:200;letter-spacing:.16em;padding:4px 10px;border:1px solid rgba(201,166,107,.2);color:rgba(201,166,107,.52);}
+.cc-place{font-size:10px;font-weight:200;color:rgba(201,166,107,.38);letter-spacing:.1em;}
+.cc-mission{font-size:clamp(17px,2vw,22px);font-weight:600;color:var(--tp);line-height:1.3;margin-bottom:3px;}
+.cc-div{height:1px;background:rgba(201,166,107,.1);margin:18px 0;}
+.cc-body{display:flex;gap:22px;align-items:flex-start;margin-bottom:22px;}
+.cc-glyph{flex-shrink:0;padding:14px;background:rgba(11,12,16,.5);border:1px solid rgba(201,166,107,.1);display:flex;align-items:center;justify-content:center;}
+.cc-hl{font-size:8px;font-weight:200;letter-spacing:.2em;color:rgba(201,166,107,.38);margin-bottom:5px;}
+.cc-ht{font-size:11.5px;font-weight:200;color:var(--tp2);line-height:1.9;}
+.cc-ht strong{color:var(--gold);font-weight:300;}
+.cc-foot{display:flex;gap:10px;justify-content:flex-end;padding-top:18px;border-top:1px solid rgba(201,166,107,.08);}
+.btn-main{padding:10px 22px;background:transparent;border:1px solid rgba(201,166,107,.38);font-family:'Noto Serif KR',serif;font-size:11px;font-weight:200;color:var(--gold);letter-spacing:.14em;cursor:none;transition:all .22s;}
+.btn-main:hover{background:rgba(201,166,107,.09);}
+.btn-sub{padding:10px 16px;background:transparent;border:none;border-bottom:1px solid rgba(201,166,107,.18);font-family:'Noto Serif KR',serif;font-size:11px;font-weight:200;color:rgba(201,166,107,.38);letter-spacing:.12em;cursor:none;transition:all .22s;}
+.btn-sub:hover{color:var(--gold);border-bottom-color:var(--gold);}
+/* 정답 요약 */
+.ans-row{display:flex;gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px solid rgba(201,166,107,.07);}
+.an{width:19px;height:19px;border-radius:50%;background:rgba(74,154,88,.14);border:1px solid #4a9a58;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:200;color:#4a9a58;flex-shrink:0;}
+.at{font-size:11px;font-weight:200;color:var(--mu);line-height:1.6;}
+.at em{font-style:normal;color:rgba(201,166,107,.55);}
+/* 정답 입력 */
+input.ans-inp{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(201,166,107,.25);padding:11px 0;font-family:'Noto Serif KR',serif;font-size:15px;font-weight:300;color:var(--tp);outline:none;letter-spacing:.06em;transition:border-color .2s;}
+/* 진행 스텝 바 */
+.prog-bar{display:flex;gap:7px;margin-bottom:28px;align-items:center;}
+.ps{flex:1;height:2px;background:rgba(201,166,107,.1);border-radius:1px;transition:background .4s;}
+.ps.done{background:#4a9a58;}.ps.on{background:var(--gold);}
+
+/* ═══════════════════════
+   S09 — 탐방 여정
+═══════════════════════ */
+#s9{background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%);}
+.s9-inner{max-width:1060px;margin:0 auto;padding:0 64px;min-height:100vh;display:flex;flex-direction:column;justify-content:center;}
+.jt-wrap{margin-top:48px;position:relative;}
+.jt-line{position:absolute;top:5px;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,rgba(201,166,107,.14),rgba(201,166,107,.28),rgba(201,166,107,.14),transparent);}
+.jt-grid{display:grid;grid-template-columns:repeat(5,1fr);}
+.jt{padding:0 10px;cursor:none;}
+.jt-node{width:10px;height:10px;border-radius:50%;background:var(--bg);border:1px solid rgba(201,166,107,.28);margin:0 auto 16px;position:relative;z-index:1;transition:all .3s;}
+.jt:hover .jt-node{background:var(--gold);border-color:var(--gold);box-shadow:0 0 0 4px rgba(201,166,107,.1);}
+.jt-time{display:block;font-size:9px;font-weight:200;letter-spacing:.14em;color:rgba(201,166,107,.38);margin-bottom:4px;}
+.jt-tit{font-size:12.5px;font-weight:400;color:var(--tp2);margin-bottom:4px;}
+.jt-desc{font-size:10px;font-weight:200;color:var(--mu);line-height:1.7;}
+.jt-tag{display:inline-block;margin-top:7px;font-size:8px;font-weight:200;color:var(--di);border-bottom:1px solid rgba(201,166,107,.1);padding-bottom:1px;}
+
+/* ═══════════════════════
+   S10 — 커뮤니티+스탬프
+═══════════════════════ */
+#s10{background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);}
+.s10-inner{max-width:1060px;margin:0 auto;padding:0 64px;min-height:100vh;display:flex;flex-direction:column;justify-content:center;}
+.comm-grid{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--border);margin-top:44px;}
+.cc2{padding:28px 22px;border-right:1px solid var(--border);}
+.cc2:last-child{border-right:none;}
+.cc-tit{font-size:14px;font-weight:600;color:var(--tp);margin-bottom:4px;}
+.cc-sub2{font-size:11px;font-weight:200;color:var(--mu);line-height:1.8;margin-bottom:18px;}
+/* Q&A */
+.qa-item{padding:10px 0;border-bottom:1px solid rgba(201,166,107,.06);cursor:none;transition:all .2s;}
+.qa-item:hover .qa-q{color:var(--gold);}
+.qa-q{font-size:11.5px;font-weight:300;color:var(--tp2);margin-bottom:3px;transition:color .2s;}
+.qa-m{font-size:9px;font-weight:200;color:var(--di);display:flex;gap:8px;}
+.qa-ac{color:rgba(201,166,107,.38);}
+.qa-btn{margin-top:12px;padding:7px 0;background:none;border:none;border-bottom:1px solid rgba(201,166,107,.28);font-family:'Noto Serif KR',serif;font-size:10px;font-weight:200;color:var(--gold);letter-spacing:.14em;transition:letter-spacing .25s;cursor:none;}
+.qa-btn:hover{letter-spacing:.2em;}
+/* 방명록 */
+.gfl{display:block;font-size:8px;font-weight:200;letter-spacing:.16em;color:rgba(201,166,107,.32);margin-bottom:4px;}
+.gfi,.gfta{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(201,166,107,.1);padding:7px 0;font-family:'Noto Serif KR',serif;font-size:11.5px;font-weight:200;color:var(--tp);outline:none;transition:border-color .2s;resize:none;margin-bottom:10px;}
+.gfi::placeholder,.gfta::placeholder{color:var(--di);}
+.gfi:focus,.gfta:focus{border-bottom-color:rgba(201,166,107,.28);}
+.gfta{height:60px;}
+.gbtn{padding:7px 0;background:none;border:none;border-bottom:1px solid rgba(201,166,107,.28);font-family:'Noto Serif KR',serif;font-size:10px;font-weight:200;color:var(--gold);letter-spacing:.14em;width:100%;text-align:left;transition:letter-spacing .25s;cursor:none;}
+.gbtn:hover{letter-spacing:.2em;}
+.gbe-list{display:flex;flex-direction:column;gap:0;margin-top:10px;max-height:90px;overflow-y:auto;}
+.gbe{padding:6px 0;border-bottom:1px solid rgba(201,166,107,.05);}
+.gben{font-size:9px;font-weight:200;color:rgba(201,166,107,.32);font-style:italic;margin-bottom:2px;}
+.gbem{font-size:10.5px;font-weight:200;color:var(--mu);line-height:1.6;}
+/* 스탬프 */
+.stamp-svg-wrap{border:1px solid rgba(201,166,107,.12);padding:14px;margin-bottom:14px;background:rgba(5,22,26,.28);}
+.stamp-rows{display:flex;flex-direction:column;gap:6px;}
+.srow{display:flex;align-items:center;gap:9px;padding:8px 8px;border-bottom:1px solid rgba(201,166,107,.06);transition:background .2s;}
+.srow:hover{background:rgba(201,166,107,.03);}
+.sbadge{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s;}
+.sbadge.ul{background:rgba(201,166,107,.12);border:1px solid rgba(201,166,107,.28);}
+.sbadge.lk{background:rgba(201,166,107,.04);border:1px solid rgba(201,166,107,.1);opacity:.5;}
+.sinf{flex:1;}
+.sn{font-size:11px;font-weight:400;color:var(--tp2);margin-bottom:2px;}
+.sd{font-size:9.5px;font-weight:200;color:var(--mu);line-height:1.6;}
+.sd em{font-style:normal;color:rgba(201,166,107,.55);}
+.schk{font-size:11px;font-weight:200;color:var(--di);flex-shrink:0;width:18px;text-align:center;}
+.schk.on{color:#4a9a58;}
+.s-prog{height:1px;background:rgba(201,166,107,.1);overflow:hidden;margin-top:9px;}
+.s-progf{height:100%;background:var(--gold);transition:width .7s ease;}
+.s-progt{font-size:9px;font-weight:200;color:var(--mu);margin-top:4px;display:flex;justify-content:space-between;letter-spacing:.07em;}
+.stamp-demo{margin-top:9px;padding:6px 0;background:none;border:none;border-bottom:1px solid rgba(201,166,107,.12);font-family:'Noto Serif KR',serif;font-size:9px;font-weight:200;color:rgba(201,166,107,.32);letter-spacing:.13em;cursor:none;transition:color .2s;text-align:left;width:100%;}
+.stamp-demo:hover{color:var(--gold);}
+
+/* ═══════════════════════
+   S11 — 오시는 길
+═══════════════════════ */
+#s11{background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%);}
+.s11-inner{max-width:1060px;margin:0 auto;padding:0 64px;min-height:100vh;display:flex;flex-direction:column;justify-content:center;}
+.access-cols{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--border);margin-top:36px;}
+.ac{padding:26px 22px;border-right:1px solid var(--border);}
+.ac:last-child{border-right:none;}
+.ac-t{font-size:12.5px;font-weight:400;color:var(--tp2);margin-bottom:12px;}
+.acr{display:flex;gap:8px;font-size:11px;font-weight:200;margin-bottom:6px;}
+.ack{color:var(--di);flex-shrink:0;width:50px;}
+.acv{color:var(--mu);line-height:1.6;}
+.cs-bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-top:18px;margin-top:6px;border-top:1px solid var(--border);}
+.csn{font-size:19px;font-weight:600;color:var(--tp);display:flex;align-items:center;gap:6px;}
+.csi{color:var(--gold);}
+.csl{font-size:8px;font-weight:200;color:var(--mu);letter-spacing:.12em;margin-bottom:2px;}
+.pts{display:flex;gap:6px;flex-wrap:wrap;}
+.pti{padding:4px 9px;border-bottom:1px solid rgba(201,166,107,.1);font-size:9px;font-weight:200;color:var(--di);letter-spacing:.06em;cursor:none;transition:all .2s;}
+.pti:hover{border-bottom-color:var(--gold);color:rgba(201,166,107,.55);}
+
+/* FOOTER */
+footer{scroll-snap-align:start;background:var(--bg);border-top:1px solid var(--border);padding:26px 64px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.fb2{font-size:12px;font-weight:400;color:var(--tp);letter-spacing:.1em;}
+.fi2{font-size:10px;font-weight:200;color:var(--di);line-height:1.8;}
+.fm2{font-size:10px;font-weight:200;color:rgba(201,166,107,.28);letter-spacing:.1em;}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .8s ease,transform .8s ease;}
+.rv-l{opacity:0;transform:translateX(-18px);transition:opacity .8s ease,transform .8s ease;}
+.rv-r{opacity:0;transform:translateX(18px);transition:opacity .8s ease,transform .8s ease;}
+.rv.on,.rv-l.on,.rv-r.on{opacity:1;transform:none;}
+
+/* 파티클 */
+#ptc{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.p{position:absolute;border-radius:50%;opacity:0;background:var(--gold);animation:pf linear infinite;}
+@keyframes pf{0%{transform:translateY(100vh);opacity:0}12%{opacity:.09}88%{opacity:.03}100%{transform:translateY(-30px);opacity:0}}
+</style>
+</head>
+<body>
+<div id="ptc"></div>
+<div id="cur"></div>
+<div id="cur2"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nl">반구대 암각화</div>
+  <ul class="nr">
+    <li><a href="#s1" class="on">소개</a></li>
+    <li><a href="#s3">해독</a></li>
+    <li><a href="#s4">추적</a></li>
+    <li><a href="#s7">관람 가능 지수</a></li>
+    <li><a href="#s8">단서</a></li>
+    <li><a href="#s9">복원</a></li>
+    <li><a href="#s10">커뮤니티</a></li>
+    <li><a href="#s11">길 안내</a></li>
+    <button class="nav-cta" onclick="document.getElementById('s3').scrollIntoView({behavior:'smooth'})">바로가기 →</button>
+  </ul>
+</nav>
+
+<!-- ════ S01 HERO ════ -->
+<section id="s1" class="fs">
+  <div class="s1-bg"></div><div class="s1-grid-tex"></div>
+  <div class="s1-inner">
+    <div class="s1-kicker">국보 제285호 · 울산광역시 울주군 · 세계 최초 고래 사냥 기록</div>
+    <div class="s1-brush"><img src="/mnt/user-data/uploads/1775250755298_image.png" alt="반구대 암각화"></div>
+    <div class="s1-photos">
+      <div class="s1-photo-main">
+        <svg viewBox="0 0 280 200" fill="none"><rect width="280" height="200" fill="#0a1a12"/><path d="M0 120Q40 90 80 110Q120 80 160 100Q200 70 240 90L280 80V200H0Z" fill="rgba(26,58,28,.6)"/><path d="M80 60Q100 40 130 50Q160 30 190 45Q220 25 250 38" stroke="rgba(201,166,107,.2)" stroke-width="1.5" fill="none"/><path d="M30 90Q60 70 90 80Q120 60 150 72" stroke="rgba(201,166,107,.15)" stroke-width="1" fill="none"/><text x="140" y="110" text-anchor="middle" fill="rgba(201,166,107,.18)" font-size="10" font-family="serif" letter-spacing="2">대 곡 천 절 벽</text></svg>
+      </div>
+      <div class="s1-photo-stack">
+        <div class="s1-photo-sm">
+          <svg viewBox="0 0 120 80" fill="none"><rect width="120" height="80" fill="#0c1410"/><path d="M10 40Q30 20 60 28Q85 16 110 24" stroke="#C9A66B" stroke-width="2" fill="none" opacity=".6"/><circle cx="85" cy="22" r="3" fill="#C9A66B" opacity=".8"/><path d="M60 28Q58 18 54 8M60 28Q63 16 68 6" stroke="#C9A66B" stroke-width="1.2" opacity=".65" fill="none"/><text x="60" y="68" text-anchor="middle" fill="rgba(201,166,107,.22)" font-size="7" font-family="serif">암각화 도상</text></svg>
+        </div>
+        <div class="s1-photo-sm">
+          <svg viewBox="0 0 120 80" fill="none"><rect width="120" height="80" fill="#0e1208"/><path d="M15 45Q35 25 55 32Q75 18 100 28Q112 22 116 32Q118 40 112 44Q90 54 60 48Q28 50 17 47Z" stroke="#C9A66B" stroke-width="1.8" fill="rgba(201,166,107,.12)"/><circle cx="106" cy="26" r="3" fill="#C9A66B" opacity=".9"/><text x="60" y="72" text-anchor="middle" fill="rgba(201,166,107,.22)" font-size="7" font-family="serif">귀신고래</text></svg>
+        </div>
+      </div>
+    </div>
+    <div class="s1-tagline">심연에서 깨어난 태고의 각인</div>
+    <div class="s1-sub">7,000년의 침묵을 해독하다</div>
+    <div class="s1-scroll" onclick="document.getElementById('s2').scrollIntoView({behavior:'smooth'})">
+      <div class="s1-scroll-line"></div>
+      <span>스크롤</span>
+    </div>
+  </div>
+  <div class="s1-stats">
+    <div class="ss"><span class="ssn">7,000</span><span class="ssl">년 전 제작 추정</span></div>
+    <div class="ss"><span class="ssn">300+</span><span class="ssl">암각화 도상 수</span></div>
+    <div class="ss"><span class="ssn">8×3M</span><span class="ssl">주 암면 크기</span></div>
+    <div class="ss"><span class="ssn">NO.285</span><span class="ssl">국보 지정</span></div>
+  </div>
+</section>
+
+<!-- ════ S02 소개 ════ -->
+<section id="s2" class="fs">
+  <div class="s2-inner">
+    <div class="rv-l">
+      <span class="s2-num">01</span>
+      <span class="s2-lbl">반구대 소개 · 제작 기법 · 보존 가치</span>
+      <div class="s2-title">바위에 새긴<br><em>7,000년의 언어</em></div>
+      <div class="s2-rule"></div>
+      <p class="s2-body">태화강 상류 대곡천 절벽에 위치한 반구대 암각화는 신석기~청동기 시대에 제작된 세계 최고(最古)의 고래 사냥 기록입니다. 8×3m 주 암면에 300여 점의 도상이 새겨져 있습니다.</p>
+      <div class="s2-quote">
+        <q>"선사시대 인류의 바다 생태 관찰 능력이 현대 고래 연구자들을 놀라게 할 만큼 정밀하다."</q>
+        <cite>— 울산 암각화 국제 학술심포지엄, 2019</cite>
+      </div>
+      <div class="s2-tabs">
+        <button class="s2t on" onclick="swTab(this,'tc')">제작 기법</button>
+        <button class="s2t" onclick="swTab(this,'tv')">보존 가치</button>
+        <button class="s2t" onclick="swTab(this,'th')">보존 위기</button>
+      </div>
+      <div id="tc" class="s2-tab-content on">
+        <div class="s2-tab-item"><div class="sti-dot"></div><div><div class="sti-t">쪼기 (Pecking) 기법</div><div class="sti-b">돌 도구로 반복적으로 두드려 음각 선을 만드는 기법. 선의 깊이와 폭으로 원근감을 표현했습니다.</div></div></div>
+        <div class="s2-tab-item"><div class="sti-dot"></div><div><div class="sti-t">갈기 (Grinding) 기법</div><div class="sti-b">쪼기 후 다른 돌로 문질러 매끄럽게 마무리. 동물 실루엣의 부드러운 곡선을 구현했습니다.</div></div></div>
+        <div class="s2-tab-item"><div class="sti-dot"></div><div><div class="sti-t">선각 (Incision) 기법</div><div class="sti-b">날카로운 도구로 가는 선을 그어 고래 배꼽선, 물줄기 등 세밀한 내부를 묘사했습니다.</div></div></div>
+      </div>
+      <div id="tv" class="s2-tab-content">
+        <div class="s2-tab-item"><div class="sti-dot"></div><div><div class="sti-t">세계 최초 고래 사냥 기록</div><div class="sti-b">귀신고래·혹등고래 등 10여 종이 묘사된 세계에서 가장 오래된 포경 문화 기록입니다.</div></div></div>
+        <div class="s2-tab-item"><div class="sti-dot"></div><div><div class="sti-t">UNESCO 세계유산 등재 추진</div><div class="sti-b">동북아시아 선사문화의 핵심 유산으로 세계문화유산 등재 심사 진행 중입니다.</div></div></div>
+      </div>
+      <div id="th" class="s2-tab-content">
+        <div class="s2-tab-item"><div class="sti-dot"></div><div><div class="sti-t">사연댐 수몰 문제</div><div class="sti-b">1965년 댐 건설 후 연간 수개월 수몰로 표면 박리·균열이 지속 심화되고 있습니다.</div></div></div>
+        <div class="s2-tab-item"><div class="sti-dot"></div><div><div class="sti-t">디지털 아카이빙</div><div class="sti-b">3D 스캔·드론 촬영으로 원형 데이터 구축 완료. 훼손 시 복원의 기반입니다.</div></div></div>
+      </div>
+    </div>
+    <div class="s2-right rv-r">
+      <div class="s2-fig" style="left:0;top:0;"><span class="s2fn">7,000</span><span class="s2fl">년 전</span><p class="s2fd">신석기 시대 최초 제작.</p></div>
+      <div class="s2-fig" style="right:0;top:110px;"><span class="s2fn">300+</span><span class="s2fl">도상</span><p class="s2fd">고래 10종, 육상동물, 인물 포함.</p></div>
+      <div class="s2-fig" style="left:16px;top:248px;"><span class="s2fn">8×3m</span><span class="s2fl">주 암면</span><p class="s2fd">수직 절벽면. 남향. 대곡천 방향.</p></div>
+      <div class="s2-fig" style="right:8px;top:368px;"><span class="s2fn">50%↑</span><span class="s2fl">훼손 진행</span><p class="s2fd">수몰·건조 반복으로 원형 소실.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ S03 해독 ════ -->
+<section id="s3" class="fs" style="min-height:100vh;">
+  <canvas id="gc"></canvas>
+  <div id="gscene"></div>
+  <div id="g-hint">마우스를 움직여 암각화를 찾아보세요</div>
+  <div id="g-pr">0 / 9 해독</div>
+  <div id="qpop"><div class="qp"><div class="qp-hd"><span class="qp-tag" id="qtag">DECIPHER</span><button class="qp-x" onclick="closeQ()">✕</button></div><div class="qp-q" id="qq"></div><div class="qp-list" id="qlist"></div><div class="qp-fb" id="qfb"></div></div></div>
+  <div id="cover">
+    <div class="cv-l" id="cv-anim"></div>
+    <div class="cv-r"><div class="cv-ey" id="cv-ey"></div><div class="cv-ti" id="cv-ti"></div><div class="cv-rule"></div><p class="cv-bd" id="cv-bd"></p><button class="cv-btn" onclick="closeCover()">계속 탐험하기 →</button></div>
+  </div>
+  <div id="gbar">
+    <div class="gb-groups">
+      <div class="gbg"><span class="gbl">바다</span><div class="gbd-wrap"><div class="gbd" id="gbd-sea-0"></div><div class="gbd" id="gbd-sea-1"></div><div class="gbd" id="gbd-sea-2"></div></div><span class="gb-badge" id="gbb-sea">CLEAR ✓</span></div>
+      <div class="gbg"><span class="gbl">산</span><div class="gbd-wrap"><div class="gbd" id="gbd-land-0"></div><div class="gbd" id="gbd-land-1"></div><div class="gbd" id="gbd-land-2"></div></div><span class="gb-badge" id="gbb-land">CLEAR ✓</span></div>
+      <div class="gbg"><span class="gbl">사람</span><div class="gbd-wrap"><div class="gbd" id="gbd-human-0"></div><div class="gbd" id="gbd-human-1"></div><div class="gbd" id="gbd-human-2"></div></div><span class="gb-badge" id="gbb-human">CLEAR ✓</span></div>
+    </div>
+    <button id="gnext" onclick="alert('다음 챕터로 이동합니다!')">다음 챕터 →</button>
+  </div>
+</section>
+
+<!-- ════ S04 단서 기록 ════ -->
+<section id="s4" class="fs" style="min-height:100vh;overflow-y:auto;">
+  <div class="s4-inner">
+    <div class="sh rv">
+      <span class="sh-num">03</span>
+      <span class="sh-lbl">암각화 단서 기록</span>
+      <div class="sh-tit">돌에 새긴 메시지,<br><em>7,000년 만에 읽히다</em></div>
+      <div class="sh-rule"></div>
+      <p class="sh-body">반구대 암각화는 단순한 동물 그림이 아닙니다. 도상들이 모여 이루는 패턴 속에는 선사인의 세계관, 생태 지식, 사회 구조가 담겨 있습니다.</p>
+    </div>
+    <div class="ch-tabs rv">
+      <button class="cht on" onclick="swCh(this,'c-sea')">· 바다</button>
+      <button class="cht" onclick="swCh(this,'c-land')">· 경계</button>
+      <button class="cht" onclick="swCh(this,'c-human')">· 집단</button>
+    </div>
+
+    <!-- 바다 챕터 -->
+    <div id="c-sea" class="ch-content on rv">
+      <div>
+        <div class="sea-glyphs">
+          <svg width="120" height="58" viewBox="0 0 160 78" fill="none"><path d="M7 43Q27 13 70 21Q113 7 147 25Q161 17 165 35Q167 47 155 53Q117 65 67 57Q23 61 9 47Z" stroke="#C9A66B" stroke-width="2" fill="rgba(201,166,107,.12)"/><path d="M165 35Q173 41 169 53" stroke="#C9A66B" stroke-width="1.6" fill="none"/><path d="M63 55Q77 71 89 61" stroke="#C9A66B" stroke-width="1.4" fill="none"/><circle cx="151" cy="25" r="4" fill="#C9A66B" opacity=".9"/></svg>
+          <svg width="100" height="64" viewBox="0 0 148 90" fill="none"><path d="M9 57Q37 27 73 37Q107 21 131 39Q139 31 141 47Q143 57 131 63Q95 77 53 67Q15 69 11 59Z" stroke="#C9A66B" stroke-width="2" fill="rgba(201,166,107,.1)"/><path d="M81 35Q77 19 69 7M81 35Q85 17 93 5" stroke="#C9A66B" stroke-width="1.3" fill="none" opacity=".8"/><circle cx="125" cy="39" r="3.5" fill="#C9A66B" opacity=".85"/></svg>
+          <svg width="110" height="54" viewBox="0 0 153 73" fill="none"><path d="M5 37Q19 13 49 19Q81 7 109 17Q129 11 137 25Q141 33 135 41Q111 53 69 49Q29 51 7 41Z" stroke="#C9A66B" stroke-width="2" fill="rgba(201,166,107,.1)"/><line x1="55" y1="11" x2="91" y2="19" stroke="#C9A66B" stroke-width="1" stroke-dasharray="4,3" opacity=".55"/><polygon points="55,7 51,13 59,13" fill="#C9A66B" opacity=".5"/></svg>
+        </div>
+      </div>
+      <div>
+        <span style="font-size:9px;font-weight:200;letter-spacing:.22em;color:rgba(201,166,107,.38);display:block;margin-bottom:10px;">CHAPTER 01</span>
+        <div style="font-size:clamp(22px,2.5vw,28px);font-weight:600;color:var(--tp);line-height:1.3;margin-bottom:10px;">바다를 읽는<br><span style="color:var(--gold);">사람들</span></div>
+        <div style="width:24px;height:1px;background:rgba(201,166,107,.35);margin:12px 0;"></div>
+        <p style="font-size:12px;font-weight:200;color:var(--mu);line-height:2.1;margin-bottom:14px;">귀신고래, 분기고래, 그물이 한 화면에 공존합니다. 선사인은 고래의 습성 — 물을 뿜는 행동, 회유 경로, 무리의 크기 — 까지 관찰하고 기록했습니다.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;">
+          <span style="padding:2px 9px;border-bottom:1px solid rgba(201,166,107,.12);font-size:9px;font-weight:200;color:var(--di);">귀신 고래</span>
+          <span style="padding:2px 9px;border-bottom:1px solid rgba(201,166,107,.12);font-size:9px;font-weight:200;color:var(--di);">분기고래</span>
+          <span style="padding:2px 9px;border-bottom:1px solid rgba(201,166,107,.12);font-size:9px;font-weight:200;color:var(--di);">그물</span>
+          <span style="padding:2px 9px;border-bottom:1px solid rgba(201,166,107,.12);font-size:9px;font-weight:200;color:var(--di);">작살 장면</span>
+          <span style="padding:2px 9px;border-bottom:1px solid rgba(201,166,107,.12);font-size:9px;font-weight:200;color:var(--di);">범고래</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:22px;padding-top:14px;border-top:1px solid var(--border);font-size:9px;font-weight:200;color:var(--mu);letter-spacing:.1em;">
+          <span>신석기 시대 · 약 7,000년 전</span><span>해양 생태 기록</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 경계 챕터 -->
+    <div id="c-land" class="ch-content rv">
+      <div>
+        <div style="margin-bottom:10px;font-size:8px;font-weight:200;letter-spacing:.2em;color:rgba(201,166,107,.32);">도상을 드래그해서 생활 장면에 배치하세요</div>
+        <div id="card-palette" style="display:flex;flex-wrap:wrap;gap:7px;min-height:50px;padding:10px;border:1px dashed rgba(201,166,107,.14);margin-bottom:10px;">
+          <div class="drag-card" draggable="true" data-type="predator" data-name="호랑이" ondragstart="dc(event)"><svg width="36" height="26" viewBox="0 0 50 34" fill="none"><path d="M6 18Q8 9 20 7Q32 3 42 11Q48 17 44 24Q38 32 24 30Q9 28 6 20Z" stroke="#C9A66B" stroke-width="1.3" fill="rgba(201,166,107,.1)"/><path d="M42 11Q48 7 50 13Q48 19 42 15" stroke="#C9A66B" stroke-width="1" fill="none"/><circle cx="38" cy="13" r="1.5" fill="#C9A66B" opacity=".8"/></svg><span>호랑이</span></div>
+          <div class="drag-card" draggable="true" data-type="prey" data-name="사슴" ondragstart="dc(event)"><svg width="30" height="34" viewBox="0 0 44 52" fill="none"><ellipse cx="22" cy="32" rx="16" ry="12" stroke="#C9A66B" stroke-width="1.3" fill="rgba(201,166,107,.1)"/><line x1="22" y1="20" x2="22" y2="10" stroke="#C9A66B" stroke-width="1.3"/><ellipse cx="22" cy="6" rx="7" ry="6" stroke="#C9A66B" stroke-width="1.1" fill="rgba(201,166,107,.08)"/><path d="M17 2L12 -4M27 2L32 -4" stroke="#C9A66B" stroke-width="1"/><circle cx="19" cy="5" r="1.3" fill="#C9A66B" opacity=".7"/><circle cx="25" cy="5" r="1.3" fill="#C9A66B" opacity=".7"/></svg><span>사슴</span></div>
+          <div class="drag-card" draggable="true" data-type="predator" data-name="멧돼지" ondragstart="dc(event)"><svg width="34" height="24" viewBox="0 0 48 34" fill="none"><path d="M8 20Q10 10 24 8Q38 4 44 14Q48 20 44 26Q36 32 20 30Q8 28 8 22Z" stroke="#C9A66B" stroke-width="1.3" fill="rgba(201,166,107,.09)"/><path d="M44 14Q50 10 50 18Q48 24 44 20" stroke="#C9A66B" stroke-width="1" fill="none"/><circle cx="40" cy="14" r="1.5" fill="#C9A66B" opacity=".8"/></svg><span>멧돼지</span></div>
+          <div class="drag-card" draggable="true" data-type="prey" data-name="노루" ondragstart="dc(event)"><svg width="28" height="28" viewBox="0 0 40 42" fill="none"><ellipse cx="20" cy="26" rx="13" ry="10" stroke="#C9A66B" stroke-width="1.2" fill="rgba(201,166,107,.09)"/><line x1="20" y1="16" x2="20" y2="8" stroke="#C9A66B" stroke-width="1.2"/><ellipse cx="20" cy="4" rx="6" ry="5" stroke="#C9A66B" stroke-width="1.1" fill="rgba(201,166,107,.07)"/><path d="M16 1L13 -4M24 1L27 -4" stroke="#C9A66B" stroke-width=".9"/><circle cx="17" cy="3" r="1.1" fill="#C9A66B" opacity=".7"/><circle cx="23" cy="3" r="1.1" fill="#C9A66B" opacity=".7"/></svg><span>노루</span></div>
+          <div class="drag-card" draggable="true" data-type="predator" data-name="늑대" ondragstart="dc(event)"><svg width="34" height="24" viewBox="0 0 48 34" fill="none"><path d="M6 20Q8 8 22 6Q36 2 44 12Q48 18 44 26Q36 32 18 30Q6 28 6 22Z" stroke="#C9A66B" stroke-width="1.3" fill="rgba(201,166,107,.09)"/><path d="M44 12Q50 6 52 14Q50 20 44 16" stroke="#C9A66B" stroke-width="1" fill="none"/><circle cx="40" cy="13" r="1.5" fill="#C9A66B" opacity=".8"/></svg><span>늑대</span></div>
+          <div class="drag-card" draggable="true" data-type="prey" data-name="물고기" ondragstart="dc(event)"><svg width="34" height="20" viewBox="0 0 50 28" fill="none"><path d="M6 14Q14 4 28 7Q40 3 46 14Q40 24 28 21Q14 24 6 14Z" stroke="#C9A66B" stroke-width="1.2" fill="rgba(201,166,107,.09)"/><path d="M3 12L6 14L3 16" stroke="#C9A66B" stroke-width="1" fill="none"/><circle cx="41" cy="13" r="1.3" fill="#C9A66B" opacity=".7"/></svg><span>물고기</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+          <div id="zone-threat" class="drop-zone" ondragover="event.preventDefault()" ondrop="dropC(event,'threat')"><div class="dz-lbl">위협 · 맹수 구역</div><div class="dz-cards" id="dz-threat"></div></div>
+          <div id="zone-hunt" class="drop-zone" ondragover="event.preventDefault()" ondrop="dropC(event,'hunt')"><div class="dz-lbl">사냥감 · 먹잇감 구역</div><div class="dz-cards" id="dz-hunt"></div></div>
+        </div>
+        <div class="scene-box" id="life-scene"><div class="scene-lbl">배치에 따른 생활 장면</div><div class="scene-txt" id="scene-txt">도상을 배치하면 선사인의 생활 모습이 달라집니다</div></div>
+        <button class="s4-reset" onclick="resetZones()">초기화 →</button>
+      </div>
+      <div>
+        <span style="font-size:9px;font-weight:200;letter-spacing:.22em;color:rgba(201,166,107,.38);display:block;margin-bottom:10px;">CHAPTER 02</span>
+        <div style="font-size:clamp(22px,2.5vw,28px);font-weight:600;color:var(--tp);line-height:1.3;margin-bottom:10px;">두 세계의<br><span style="color:var(--gold);">경계</span></div>
+        <div style="width:24px;height:1px;background:rgba(201,166,107,.35);margin:12px 0;"></div>
+        <p style="font-size:12px;font-weight:200;color:var(--mu);line-height:2.1;margin-bottom:14px;">도상을 직접 배치해보세요. 어떤 동물을 어디에 두느냐에 따라 선사인의 하루가 달라집니다.</p>
+        <div style="padding:12px 0;border-bottom:1px solid var(--border);">
+          <div style="font-size:8px;font-weight:200;letter-spacing:.16em;color:rgba(201,166,107,.35);margin-bottom:5px;">관찰 포인트</div>
+          <div style="font-size:11px;font-weight:200;color:var(--tp2);line-height:1.9;">호랑이는 완전 측면으로, 사슴은 정면에 가깝게 새겨져 있습니다. 선사인이 위협과 먹잇감을 <span style="color:var(--gold);">다르게 인식</span>했다는 증거입니다.</div>
+        </div>
+        <div style="padding:12px 0;border-bottom:1px solid var(--border);">
+          <div style="font-size:8px;font-weight:200;letter-spacing:.16em;color:rgba(201,166,107,.35);margin-bottom:5px;">배치 결과</div>
+          <div id="ch2-res" style="font-size:11px;font-weight:200;color:var(--mu);line-height:1.9;">아직 배치하지 않았습니다.</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:22px;padding-top:14px;border-top:1px solid var(--border);font-size:9px;font-weight:200;color:var(--mu);letter-spacing:.1em;">
+          <span>신석기~청동기 · 약 5,000년 전</span><span>인지와 시각 언어</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 집단 챕터 -->
+    <div id="c-human" class="ch-content rv">
+      <div>
+        <div style="margin-bottom:10px;font-size:8px;font-weight:200;letter-spacing:.2em;color:rgba(201,166,107,.32);">세 사냥꾼에게 도구를 배분하세요</div>
+        <div id="tool-palette" style="display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;">
+          <div class="tool-card" draggable="true" data-tool="bow" ondragstart="td(event)"><svg width="26" height="26" viewBox="0 0 32 32" fill="none"><path d="M8 4Q18 8 24 16Q18 24 8 28" stroke="#C9A66B" stroke-width="1.4" fill="none"/><line x1="8" y1="4" x2="8" y2="28" stroke="#C9A66B" stroke-width="1"/><line x1="8" y1="16" x2="26" y2="14" stroke="#C9A66B" stroke-width=".9" stroke-dasharray="3,2"/><polygon points="26,12 30,14 26,16" fill="#C9A66B" opacity=".7"/></svg><span>활과 화살</span></div>
+          <div class="tool-card" draggable="true" data-tool="spear" ondragstart="td(event)"><svg width="26" height="26" viewBox="0 0 32 32" fill="none"><line x1="4" y1="28" x2="24" y2="8" stroke="#C9A66B" stroke-width="1.4"/><polygon points="24,6 28,10 22,12" fill="#C9A66B" opacity=".8"/></svg><span>창</span></div>
+          <div class="tool-card" draggable="true" data-tool="net" ondragstart="td(event)"><svg width="26" height="26" viewBox="0 0 32 32" fill="none"><path d="M4 8L28 8M4 16L28 16M4 24L28 24M8 4L8 28M16 4L16 28M24 4L24 28" stroke="#C9A66B" stroke-width=".9" opacity=".7"/><rect x="4" y="4" width="24" height="24" stroke="#C9A66B" stroke-width="1.2" fill="none"/></svg><span>그물</span></div>
+          <div class="tool-card" draggable="true" data-tool="torch" ondragstart="td(event)"><svg width="26" height="26" viewBox="0 0 32 32" fill="none"><line x1="16" y1="28" x2="16" y2="14" stroke="#C9A66B" stroke-width="1.4"/><path d="M10 14Q16 4 22 14Q18 18 16 14Q14 18 10 14Z" stroke="#C9A66B" stroke-width="1" fill="rgba(201,166,107,.15)"/></svg><span>횃불</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;">
+          <div class="hz" id="hz-0" ondragover="event.preventDefault()" ondrop="toolDrop(event,0)"><svg width="34" height="62" viewBox="0 0 26 52" fill="none"><ellipse cx="13" cy="7" rx="5" ry="5" stroke="#C9A66B" stroke-width="1.2" fill="rgba(201,166,107,.1)"/><line x1="13" y1="12" x2="13" y2="30" stroke="#C9A66B" stroke-width="1.2"/><path d="M13 20L5 28M13 20L21 28" stroke="#C9A66B" stroke-width="1.2"/><line x1="13" y1="30" x2="8" y2="44" stroke="#C9A66B" stroke-width="1.2"/><line x1="13" y1="30" x2="18" y2="44" stroke="#C9A66B" stroke-width="1.2"/></svg><div class="hzl">사냥꾼 A</div><div class="hzt" id="ht-0">— 미배정 —</div></div>
+          <div class="hz" id="hz-1" ondragover="event.preventDefault()" ondrop="toolDrop(event,1)"><svg width="34" height="62" viewBox="0 0 26 52" fill="none"><ellipse cx="13" cy="7" rx="5" ry="5" stroke="#C9A66B" stroke-width="1.2" fill="rgba(201,166,107,.1)"/><line x1="13" y1="12" x2="13" y2="30" stroke="#C9A66B" stroke-width="1.2"/><path d="M13 20L5 28M13 20L21 28" stroke="#C9A66B" stroke-width="1.2"/><line x1="13" y1="30" x2="8" y2="44" stroke="#C9A66B" stroke-width="1.2"/><line x1="13" y1="30" x2="18" y2="44" stroke="#C9A66B" stroke-width="1.2"/></svg><div class="hzl">사냥꾼 B</div><div class="hzt" id="ht-1">— 미배정 —</div></div>
+          <div class="hz" id="hz-2" ondragover="event.preventDefault()" ondrop="toolDrop(event,2)"><svg width="34" height="62" viewBox="0 0 26 52" fill="none"><ellipse cx="13" cy="7" rx="5" ry="5" stroke="#C9A66B" stroke-width="1.2" fill="rgba(201,166,107,.1)"/><line x1="13" y1="12" x2="13" y2="30" stroke="#C9A66B" stroke-width="1.2"/><path d="M13 20L5 28M13 20L21 28" stroke="#C9A66B" stroke-width="1.2"/><line x1="13" y1="30" x2="8" y2="44" stroke="#C9A66B" stroke-width="1.2"/><line x1="13" y1="30" x2="18" y2="44" stroke="#C9A66B" stroke-width="1.2"/></svg><div class="hzl">사냥꾼 C</div><div class="hzt" id="ht-2">— 미배정 —</div></div>
+        </div>
+        <div class="hunt-box" id="hunt-result"><div class="scene-lbl">사냥 결과</div><div class="scene-txt" id="hunt-txt">도구를 배분하면 사냥 결과가 바뀝니다</div></div>
+        <button class="s4-reset" onclick="resetHunters()">초기화 →</button>
+      </div>
+      <div>
+        <span style="font-size:9px;font-weight:200;letter-spacing:.22em;color:rgba(201,166,107,.38);display:block;margin-bottom:10px;">CHAPTER 03</span>
+        <div style="font-size:clamp(22px,2.5vw,28px);font-weight:600;color:var(--tp);line-height:1.3;margin-bottom:10px;">집단으로<br><span style="color:var(--gold);">살아남다</span></div>
+        <div style="width:24px;height:1px;background:rgba(201,166,107,.35);margin:12px 0;"></div>
+        <p style="font-size:12px;font-weight:200;color:var(--mu);line-height:2.1;margin-bottom:14px;">세 사냥꾼에게 도구를 어떻게 배분하느냐에 따라 사냥의 성패가 달라집니다. 활·창·그물을 다양하게 조합해보세요.</p>
+        <div style="padding:12px 0;border-bottom:1px solid var(--border);">
+          <div style="font-size:8px;font-weight:200;letter-spacing:.16em;color:rgba(201,166,107,.35);margin-bottom:5px;">관찰 포인트</div>
+          <div style="font-size:11px;font-weight:200;color:var(--tp2);line-height:1.9;">반구대에서는 사냥꾼이 항상 무리 지어 등장합니다. 이미 <span style="color:var(--gold);">역할 분담과 집단 협업</span>이 존재했음을 보여줍니다.</div>
+        </div>
+        <div style="padding:12px 0;border-bottom:1px solid var(--border);">
+          <div style="font-size:8px;font-weight:200;letter-spacing:.16em;color:rgba(201,166,107,.35);margin-bottom:5px;">현재 배분 결과</div>
+          <div id="ch3-res" style="font-size:11px;font-weight:200;color:var(--mu);line-height:1.9;">아직 배분하지 않았습니다.</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:22px;padding-top:14px;border-top:1px solid var(--border);font-size:9px;font-weight:200;color:var(--mu);letter-spacing:.1em;">
+          <span>신석기 시대 · 약 6,000년 전</span><span>사회 구조의 시각화</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ S05 결론 ════ -->
+<section id="s5" class="fs">
+  <div class="s5-inner">
+    <span class="s5-kicker rv">CONCLUSION</span>
+    <div class="s5-title rv">세 가지 이야기가<br>하나의 결론에 닿는다</div>
+    <div class="s5-rule rv"></div>
+    <div class="s5-cols rv">
+      <div class="s5c"><div class="s5c-num">CHAPTER 01</div><div class="s5c-t">관찰</div><p class="s5c-b">고래의 호흡 방식과 회유 경로까지 정확히 기록했다. 7,000년 전 인류는 이미 자연을 체계적으로 관찰했다.</p></div>
+      <div class="s5c"><div class="s5c-num">CHAPTER 02</div><div class="s5c-t">인식</div><p class="s5c-b">맹수와 먹잇감을 다른 각도로 묘사했다. 위협과 기회를 구별하는 인지 체계가 이미 존재했다.</p></div>
+      <div class="s5c"><div class="s5c-num">CHAPTER 03</div><div class="s5c-t">전수</div><p class="s5c-b">집단 협동과 역할 분담을 바위에 새겨 후대에 남겼다. 이것은 단순한 그림이 아니라 인류 최초의 매뉴얼이다.</p></div>
+    </div>
+    <p class="s5-quote rv">"그들은 단지 생존했던 것이 아니라, 관찰하고 인식하고 전달했다.<br>반구대 암각화는 인류 문명의 시작점 중 하나다."</p>
+    <span class="s5-cite rv">— 울산 암각화 국제 학술심포지엄, 2019</span>
+  </div>
+</section>
+
+<!-- ════ S06 AR 추리렌즈 ════ -->
+<section id="s6" class="fs">
+  <div class="s6-inner">
+    <div class="rv-l" style="display:flex;justify-content:center;">
+      <div class="phone">
+        <div class="psc">
+          <div class="pbg"></div>
+          <div class="pscan"></div>
+          <div class="pglyph"><svg width="160" height="92" viewBox="0 0 190 110" fill="none"><path d="M10 60Q30 25 68 38Q108 18 155 36Q178 26 186 50Q188 64 168 72Q132 88 84 78Q42 84 16 68Z" stroke="#C9A66B" stroke-width="1.8" fill="rgba(201,166,107,.07)"/><circle cx="172" cy="43" r="2.8" fill="#e0be88" opacity=".9"/></svg></div>
+          <div class="pcors"><div class="pc tl"></div><div class="pc tr"></div><div class="pc bl"></div><div class="pc br"></div></div>
+          <div class="pnot"></div>
+        </div>
+      </div>
+    </div>
+    <div class="rv-r">
+      <span style="font-size:9px;font-weight:200;letter-spacing:.28em;color:rgba(201,166,107,.38);display:block;margin-bottom:10px;">04 — AR 추리 렌즈</span>
+      <div style="font-size:clamp(26px,3vw,38px);font-weight:600;color:var(--tp);line-height:1.22;margin-bottom:14px;">물속에 잠긴<br><span style="color:var(--gold);">흔적을 찾아내세요</span></div>
+      <div style="width:24px;height:1px;background:rgba(201,166,107,.35);margin:14px 0;"></div>
+      <p style="font-size:12px;font-weight:200;color:var(--mu);line-height:2.1;margin-bottom:22px;">증강현실로 수위에 따라 잠긴 암각화를 되살립니다. 스마트폰을 바위 방향으로 비추면 7,000년 전 선사인의 흔적이 눈앞에 나타납니다.</p>
+      <div>
+        <div class="feat"><div class="fd"></div><div><div class="ft">실시간 도상 인식</div><div class="fb">AI가 도상의 위치를 실시간으로 인식하고 해설 카드를 표시합니다.</div></div></div>
+        <div class="feat"><div class="fd"></div><div><div class="ft">수몰 복원 모드</div><div class="fb">현재 수위 데이터와 연동하여 물속에 잠긴 도상을 실시간으로 투시합니다.</div></div></div>
+        <div class="feat"><div class="fd"></div><div><div class="ft">살물 단서 수집</div><div class="fb">도상을 스캔할 때마다 단서 카드가 쌓이고 방문 인증 스탬프가 적립됩니다.</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ S07 실시간 수위 ════ -->
+<section id="s7" class="fs">
+  <div class="s7-inner">
+    <div class="rv-l">
+      <span style="font-size:9px;font-weight:200;letter-spacing:.28em;color:rgba(201,166,107,.38);display:block;margin-bottom:10px;">05 — 실시간 관람 가능 지수</span>
+      <div style="font-size:clamp(26px,3vw,38px);font-weight:600;color:var(--tp);line-height:1.22;margin-bottom:18px;">오늘 암각화를<br><span style="color:var(--gold);">볼 수 있을까요?</span></div>
+      <p style="font-size:12px;font-weight:200;color:var(--mu);line-height:2;margin-bottom:18px;">사연댐 수위에 따라 암각화 노출 상태가 실시간으로 변합니다. 방문 전 반드시 확인하세요.</p>
+      <div class="gw">
+        <div class="gcliff" id="gcl"><div class="gwt" id="gwt" style="height:60%;"><div class="gshim"></div></div><div class="gglyph2"><svg width="80" height="80" viewBox="0 0 100 100" fill="none" style="position:relative;z-index:3;"><path d="M15 55Q28 35 48 40Q68 25 82 38Q90 30 92 45Q94 55 82 60Q60 70 38 62Q20 64 17 57Z" stroke="#C9A66B" stroke-width="1.4" fill="rgba(201,166,107,.1)" opacity=".85"/><circle cx="80" cy="38" r="1.8" fill="#e0be88" opacity=".8"/></svg></div></div>
+        <div class="gscale"><div class="gsr">53m</div><div class="gsr">50m</div><div class="gsr">47m</div><div class="gsr">44m</div></div>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:7px;">
+        <span class="dam-n" id="dnum">47.2</span><span class="dam-u">m</span>
+      </div>
+      <span class="dam-st st-warn" id="dstat">관람 가능 (부분 노출)</span>
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);">
+        <span class="sim-lbl">수위 시뮬레이터 — 드래그하여 변경</span>
+        <input type="range" class="dsl" id="dsl" min="44" max="53" step="0.1" value="47.2" oninput="uDam(this.value)">
+      </div>
+    </div>
+    <div class="clist rv-r">
+      <div class="citem"><div class="cico"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6" stroke="#C9A66B" stroke-width="1.2"/><path d="M9 5V9L11 11" stroke="#C9A66B" stroke-width="1.2" stroke-linecap="round"/></svg></div><div><div class="ct">암각화 노출 상태</div><div class="cd">현재 수위 기준 전체 도상 노출률</div><div class="cv2" id="cvexp" style="color:var(--gold);">60% 노출</div></div></div>
+      <div class="citem"><div class="cico"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9L7.5 13L14 5" stroke="#4a9a58" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="9" r="6" stroke="#4a9a58" stroke-width="1.2"/></svg></div><div><div class="ct">현장 해설 운영</div><div class="cd">전문 해설사 탐방 오늘 정상 운영</div><div class="cv2" style="color:#4a9a58;">10:00 / 13:00 / 15:00</div></div></div>
+      <div class="citem"><div class="cico"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="3" y="5" width="12" height="9" rx="1.5" stroke="#C9A66B" stroke-width="1.2" fill="none"/><path d="M6 5V4a3 3 0 016 0v1" stroke="#C9A66B" stroke-width="1.2"/></svg></div><div><div class="ct">AR 앱 연동 상태</div><div class="cd">실시간 수위 데이터 AR 앱 동기화</div><div class="cv2" style="color:#4a9a58;">동기화 완료</div></div></div>
+      <div class="citem"><div class="cico"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1.5C6.24 1.5 4 3.74 4 6.5c0 4.25 5 9 5 9s5-4.75 5-9c0-2.76-2.24-5-5-5z" stroke="#C9A66B" stroke-width="1.2" fill="none"/><circle cx="9" cy="6.5" r="1.8" fill="rgba(201,166,107,.5)"/></svg></div><div><div class="ct">예상 최적 관람일</div><div class="cd">수위 예보 기준 최대 노출 예상</div><div class="cv2" style="color:var(--gold);">4월 12일 (토)</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ S08 살물 단서 추적 ════ -->
+<section id="s8" class="fs" style="overflow-y:auto;">
+  <div class="s8-inner">
+    <div class="rv" style="margin-bottom:36px;">
+      <span style="font-size:9px;font-weight:200;letter-spacing:.28em;color:rgba(201,166,107,.38);display:block;margin-bottom:10px;">07 — 살물 단서 추적</span>
+      <div style="font-size:clamp(26px,3vw,38px);font-weight:600;color:var(--tp);line-height:1.22;">탐방로 곳곳에<br><span style="color:var(--gold);">단서가 숨겨져 있어요</span></div>
+      <div style="width:24px;height:1px;background:rgba(201,166,107,.35);margin:14px 0;"></div>
+      <p style="font-size:12px;font-weight:200;color:var(--mu);line-height:2;">박물관부터 천전리 각석까지, 탐방로 5곳에 단서가 하나씩 숨겨져 있습니다. 아래 시작 버튼을 눌러 첫 번째 단서부터 찾아보세요.</p>
+    </div>
+    <!-- 스텝 바 -->
+    <div class="step-bar rv">
+      <div class="sdot on" id="sd-start">시작</div><div class="sline"></div>
+      <div class="sdot" id="sd0">1</div><div class="sline"></div>
+      <div class="sdot" id="sd1">2</div><div class="sline"></div>
+      <div class="sdot" id="sd2">3</div><div class="sline"></div>
+      <div class="sdot" id="sd3">4</div><div class="sline"></div>
+      <div class="sdot" id="sd4">5</div><div class="sline"></div>
+      <div class="sdot" id="sd-answer">정답</div>
+    </div>
+    <!-- 컨텐츠 -->
+    <div id="clue-content" class="rv">
+      <!-- 시작 -->
+      <div id="screen-start" class="clue-screen">
+        <div class="clue-card" style="text-align:center;">
+          <div style="padding:28px 0 24px;">
+            <svg width="90" height="44" viewBox="0 0 56 28" fill="none" style="margin:0 auto 18px;display:block;"><path d="M3 14Q13 4 28 7Q42 2 50 12Q53 18 44 22Q30 28 14 23Q4 20 3 15Z" stroke="#C9A66B" stroke-width="1.5" fill="rgba(201,166,107,.12)"/><circle cx="44" cy="10" r="2" fill="#e0be88" opacity=".9"/></svg>
+            <p style="font-size:12.5px;font-weight:200;color:var(--tp2);line-height:2;margin-bottom:24px;">5개의 단서를 찾으면<br>반구대 암각화의 비밀이 밝혀집니다.<br><span style="font-size:11px;color:var(--mu);">각 장소를 방문한 뒤 단서를 확인하고 '다음'을 눌러 진행하세요.</span></p>
+            <button class="btn-main" onclick="goStep(0)">단서 찾기 시작 →</button>
+          </div>
+        </div>
+      </div>
+      <!-- 단서 1 -->
+      <div id="screen-0" class="clue-screen" style="display:none;">
+        <div class="clue-card"><div class="cc-top"><span class="cc-badge">단서 1 / 5</span><span class="cc-place">📍 울주 암각화박물관 입구</span></div><div class="cc-mission">이 유적지의 이름은 무엇인가요?</div><div class="cc-div"></div><div class="cc-body"><div class="cc-glyph"><svg width="90" height="44" viewBox="0 0 56 28" fill="none"><path d="M3 14Q13 4 28 7Q42 2 50 12Q53 18 44 22Q30 28 14 23Q4 20 3 15Z" stroke="#C9A66B" stroke-width="1.5" fill="rgba(201,166,107,.12)"/><circle cx="44" cy="10" r="2" fill="#e0be88" opacity=".9"/></svg></div><div><div class="cc-hl">어디서 찾나요?</div><p class="cc-ht">박물관 <strong>입구 기둥</strong>에 붙어 있는 국가지정문화재 안내판을 찾으세요.</p><div class="cc-hl" style="margin-top:10px;">뭘 봐야 하나요?</div><p class="cc-ht">안내판에서 <strong>국보 번호 바로 아래</strong>를 보면 이 유적의 공식 이름이 적혀 있습니다.</p></div></div><div class="cc-foot"><button class="btn-main" onclick="goStep(1)">단서 확인했어요 — 다음 →</button></div></div>
+      </div>
+      <!-- 단서 2 -->
+      <div id="screen-1" class="clue-screen" style="display:none;">
+        <div class="clue-card"><div class="cc-top"><span class="cc-badge">단서 2 / 5</span><span class="cc-place">📍 대곡천 탐방로 중간</span></div><div class="cc-mission">암각화 바위의 크기(가로×세로)는?</div><div class="cc-div"></div><div class="cc-body"><div class="cc-glyph"><svg width="86" height="52" viewBox="0 0 50 30" fill="none"><path d="M4 15Q14 5 26 8Q38 3 46 13Q48 19 41 23Q28 27 13 23Q4 20 4 16Z" stroke="#C9A66B" stroke-width="1.4" fill="rgba(201,166,107,.1)"/><line x1="4" y1="27" x2="46" y2="27" stroke="rgba(201,166,107,.3)" stroke-width=".8" stroke-dasharray="3,2"/><text x="25" y="33" text-anchor="middle" fill="rgba(201,166,107,.32)" font-size="6" font-family="sans-serif">← 8m →</text></svg></div><div><div class="cc-hl">어디서 찾나요?</div><p class="cc-ht">탐방로 중간쯤에 있는 <strong>나무 팻말 뒷면</strong>을 뒤집어보세요.</p><div class="cc-hl" style="margin-top:10px;">뭘 봐야 하나요?</div><p class="cc-ht">팻말 뒷면에 암각화 바위의 <strong>가로×세로 크기</strong>가 미터(m) 단위로 적혀 있습니다.</p></div></div><div class="cc-foot"><button class="btn-sub" onclick="goStep(-1)">← 이전</button><button class="btn-main" onclick="goStep(2)">단서 확인했어요 — 다음 →</button></div></div>
+      </div>
+      <!-- 단서 3 -->
+      <div id="screen-2" class="clue-screen" style="display:none;">
+        <div class="clue-card"><div class="cc-top"><span class="cc-badge">단서 3 / 5</span><span class="cc-place">📍 반구대 전망대</span></div><div class="cc-mission">암각화에서 가장 크게 새겨진 동물은?</div><div class="cc-div"></div><div class="cc-body"><div class="cc-glyph"><svg width="100" height="46" viewBox="0 0 68 30" fill="none"><path d="M4 16Q14 4 32 8Q50 2 60 12Q64 18 58 22Q44 28 22 24Q6 22 4 17Z" stroke="#C9A66B" stroke-width="1.5" fill="rgba(201,166,107,.12)"/><path d="M60 12Q66 8 66 16Q64 22 60 18" stroke="#C9A66B" stroke-width="1.2" fill="none"/><circle cx="56" cy="10" r="2" fill="#e0be88" opacity=".9"/></svg></div><div><div class="cc-hl">어디서 찾나요?</div><p class="cc-ht"><strong>전망대 망원경 바로 옆</strong> 해설 표지판을 확인하세요.</p><div class="cc-hl" style="margin-top:10px;">뭘 봐야 하나요?</div><p class="cc-ht">망원경으로 바위 중앙을 보면 가장 크게 새겨진 동물이 보입니다. 표지판에 그 동물의 이름과 설명이 있습니다.</p></div></div><div class="cc-foot"><button class="btn-sub" onclick="goStep(1)">← 이전</button><button class="btn-main" onclick="goStep(3)">단서 확인했어요 — 다음 →</button></div></div>
+      </div>
+      <!-- 단서 4 -->
+      <div id="screen-3" class="clue-screen" style="display:none;">
+        <div class="clue-card"><div class="cc-top"><span class="cc-badge">단서 4 / 5</span><span class="cc-place">📍 탁본 체험장</span></div><div class="cc-mission">탁본으로 완성되는 도상의 이름은?</div><div class="cc-div"></div><div class="cc-body"><div class="cc-glyph"><svg width="86" height="42" viewBox="0 0 56 28" fill="none"><rect x="4" y="4" width="48" height="20" rx="2" stroke="rgba(201,166,107,.3)" stroke-width="1" fill="rgba(201,166,107,.05)" stroke-dasharray="4,2"/><path d="M10 14Q28 6 46 14" stroke="#C9A66B" stroke-width="1.4" fill="none"/><circle cx="43" cy="13" r="1.6" fill="#e0be88" opacity=".8"/></svg></div><div><div class="cc-hl">어디서 찾나요?</div><p class="cc-ht">탁본 체험을 완료한 뒤 <strong>체험 스태프에게 질문</strong>하세요.</p><div class="cc-hl" style="margin-top:10px;">뭘 봐야 하나요?</div><p class="cc-ht">완성된 한지 탁본에 도상이 찍혀 나옵니다. 스태프가 그 도상의 이름을 알려줄 거예요.</p></div></div><div class="cc-foot"><button class="btn-sub" onclick="goStep(2)">← 이전</button><button class="btn-main" onclick="goStep(4)">단서 확인했어요 — 다음 →</button></div></div>
+      </div>
+      <!-- 단서 5 -->
+      <div id="screen-4" class="clue-screen" style="display:none;">
+        <div class="clue-card"><div class="cc-top"><span class="cc-badge">단서 5 / 5</span><span class="cc-place">📍 천전리 각석</span></div><div class="cc-mission">두 유적지의 공통된 종류는?</div><div class="cc-div"></div><div class="cc-body"><div class="cc-glyph"><svg width="86" height="42" viewBox="0 0 56 28" fill="none"><path d="M6 14Q14 4 28 7Q40 3 46 14Q40 24 28 21Q14 24 6 14Z" stroke="#C9A66B" stroke-width="1.2" fill="rgba(201,166,107,.09)"/><circle cx="41" cy="13" r="1.5" fill="#e0be88" opacity=".7"/></svg></div><div><div class="cc-hl">어디서 찾나요?</div><p class="cc-ht">천전리 각석 <strong>안내소 벽면</strong>에 두 유적지를 비교한 표가 있습니다.</p><div class="cc-hl" style="margin-top:10px;">뭘 봐야 하나요?</div><p class="cc-ht">표에서 반구대와 천전리의 공통 종류를 찾으세요. <strong>'암(岩)'으로 시작하는 단어</strong>입니다. 반구대 + 이 단어 = 최종 정답!</p></div></div><div class="cc-foot"><button class="btn-sub" onclick="goStep(3)">← 이전</button><button class="btn-main" onclick="goStep('answer')">5개 모두 찾았어요! 정답 입력 →</button></div></div>
+      </div>
+      <!-- 정답 입력 -->
+      <div id="screen-answer" class="clue-screen" style="display:none;">
+        <div class="clue-card"><div class="cc-top"><span class="cc-badge" style="background:rgba(201,166,107,.18);border-color:var(--gold);color:var(--gold);">🎯 최종 정답</span><span class="cc-place">단서 5개 수집 완료</span></div><div class="cc-mission">지금까지 찾은 단서를 종합해<br>이 유적지의 이름을 입력하세요</div><div class="cc-div"></div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:22px;">
+            <div class="ans-row"><div class="an">1</div><div class="at">박물관 입구 안내판 → <em>유적지 공식 이름</em></div></div>
+            <div class="ans-row"><div class="an">2</div><div class="at">탐방로 팻말 뒷면 → <em>바위 크기 8×3m</em></div></div>
+            <div class="ans-row"><div class="an">3</div><div class="at">전망대 표지판 → <em>귀신고래 — 가장 큰 도상</em></div></div>
+            <div class="ans-row"><div class="an">4</div><div class="at">탁본 체험 → <em>암각화 도상 직접 확인</em></div></div>
+            <div class="ans-row"><div class="an">5</div><div class="at">천전리 비교표 → <em>암(岩)으로 시작하는 공통 단어</em></div></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;">
+            <input type="text" id="answer-input" class="ans-inp" placeholder="정답을 입력하세요" onkeydown="if(event.key==='Enter')chkAns2()">
+            <button class="btn-main" onclick="chkAns2()" style="white-space:nowrap;">확인 →</button>
+          </div>
+          <div id="answer-feedback" style="display:none;margin-top:6px;padding:13px 15px;"></div>
+          <div class="cc-foot" style="margin-top:16px;"><button class="btn-sub" onclick="goStep(4)">← 단서 다시 보기</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ S09 탐방 여정 ════ -->
+<section id="s9" class="fs">
+  <div class="s9-inner">
+    <div class="sh rv">
+      <span class="sh-lbl">08 — 탐방 여정</span>
+      <div class="sh-tit">박물관에서 암각화까지,<br><em>시간을 거슬러</em></div>
+      <div class="sh-rule"></div>
+    </div>
+    <div class="jt-wrap rv">
+      <div class="jt-line"></div>
+      <div class="jt-grid">
+        <div class="jt"><div class="jt-node"></div><span class="jt-time">09:00</span><div class="jt-tit">울주 암각화박물관</div><div class="jt-desc">복제품·디지털 전시·AR 체험관</div><span class="jt-tag">약 60분</span></div>
+        <div class="jt"><div class="jt-node"></div><span class="jt-time">10:10</span><div class="jt-tit">대곡천 탐방로</div><div class="jt-desc">1.4km 산책 · 해설사 동행</div><span class="jt-tag">약 30분</span></div>
+        <div class="jt"><div class="jt-node"></div><span class="jt-time">10:40</span><div class="jt-tit">반구대 현장</div><div class="jt-desc">망원경 관람 · AR 렌즈 활성화</div><span class="jt-tag">약 40분</span></div>
+        <div class="jt"><div class="jt-node"></div><span class="jt-time">11:10</span><div class="jt-tit">탁본 체험장</div><div class="jt-desc">복제 암각화 탁본 · 스탬프 적립</div><span class="jt-tag">약 40분</span></div>
+        <div class="jt"><div class="jt-node"></div><span class="jt-time">12:10</span><div class="jt-tit">천전리 각석</div><div class="jt-desc">국보 제147호 · 마지막 단서</div><span class="jt-tag">선택 코스</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ S10 커뮤니티 ════ -->
+<section id="s10" class="fs" style="overflow-y:auto;">
+  <div class="s10-inner">
+    <div class="sh rv">
+      <span class="sh-num">09</span>
+      <span class="sh-lbl">커뮤니티</span>
+      <div class="sh-tit">질문하고, 기록하고,<br><em>당신의 탐방을 남기세요</em></div>
+      <div class="sh-rule"></div>
+    </div>
+    <div class="comm-grid rv">
+      <!-- Q&A -->
+      <div class="cc2">
+        <div class="cc-tit">Q&A 게시판</div>
+        <div class="cc-sub2">궁금한 점을 남겨주세요. 문화재 전문가가 답변합니다.</div>
+        <div class="qa-item"><div class="qa-q">사연댐 수위가 높을 때도 관람 가능한가요?</div><div class="qa-m"><span>2025.11.10</span><span class="qa-ac">답변 2</span></div></div>
+        <div class="qa-item"><div class="qa-q">AR 앱은 어디서 다운받을 수 있나요?</div><div class="qa-m"><span>2026.01.08</span><span class="qa-ac">답변 1</span></div></div>
+        <div class="qa-item"><div class="qa-q">아이와 함께 방문 시 추천 코스는?</div><div class="qa-m"><span>2024.11.05</span><span class="qa-ac">답변 3</span></div></div>
+        <button class="qa-btn">질문 작성하기 →</button>
+      </div>
+      <!-- 방명록 -->
+      <div class="cc2">
+        <div class="cc-tit">디지털 방명록</div>
+        <div class="cc-sub2">방문의 기억을 7,000년의 기록에 더하세요.</div>
+        <label class="gfl">이름</label><input type="text" class="gfi" id="gbn" placeholder="이름을 입력하세요">
+        <label class="gfl">메시지</label><textarea class="gfta" id="gbm" placeholder="7,000년의 침묵을 해독하다."></textarea>
+        <button class="gbtn" onclick="addGb(this)">방명록 남기기 →</button>
+        <div class="gbe-list" id="gbe">
+          <div class="gbe"><div class="gben">김민준 · 2024.12.11</div><div class="gbem">아이들과 함께 보러 왔는데 좋았습니다.</div></div>
+          <div class="gbe"><div class="gben">이수아 · 2024.11.10</div><div class="gbem">AR로 수몰된 도상을 보는 순간 눈물이 날 뻔했어요.</div></div>
+        </div>
+      </div>
+      <!-- 스탬프 -->
+      <div class="cc2">
+        <div class="cc-tit">암각화 스탬프 여정</div>
+        <div class="cc-sub2">6곳에 숨겨진 스탬프를 모아 귀신고래 한 마리를 완성하세요.</div>
+        <div class="stamp-svg-wrap">
+          <div style="font-size:8px;font-weight:200;letter-spacing:.18em;color:rgba(201,166,107,.32);margin-bottom:9px;">완성 시 보이는 그림 (귀신고래)</div>
+          <svg width="100%" viewBox="0 0 240 100" fill="none">
+            <g id="sp0" opacity=".14" style="transition:opacity .7s;"><path d="M8 68 Q18 44 36 50" stroke="#C9A66B" stroke-width="1.4" fill="none"/><path d="M8 68 Q6 78 16 76 Q26 73 36 50" stroke="#C9A66B" stroke-width="1" fill="rgba(201,166,107,.08)"/></g>
+            <g id="sp1" opacity=".14" style="transition:opacity .7s;"><path d="M36 50 Q56 28 88 36 Q106 30 116 38" stroke="#C9A66B" stroke-width="1.4" fill="none"/><path d="M36 50 Q54 56 88 53 Q108 50 116 38" stroke="#C9A66B" stroke-width="1" fill="rgba(201,166,107,.08)"/></g>
+            <g id="sp2" opacity=".14" style="transition:opacity .7s;"><path d="M116 38 Q140 26 160 32 Q173 28 183 36" stroke="#C9A66B" stroke-width="1.4" fill="none"/><path d="M116 38 Q138 46 160 44 Q176 42 183 36" stroke="#C9A66B" stroke-width="1" fill="rgba(201,166,107,.08)"/><circle cx="176" cy="34" r="2.2" fill="#C9A66B" opacity=".8"/></g>
+            <g id="sp3" opacity=".14" style="transition:opacity .7s;"><path d="M183 36 Q203 24 216 32 Q226 26 228 36 Q226 48 216 52 Q203 56 183 53" stroke="#C9A66B" stroke-width="1.4" fill="rgba(201,166,107,.06)"/></g>
+            <g id="sp4" opacity=".14" style="transition:opacity .7s;"><path d="M88 53 Q98 70 113 66 Q116 56 116 38" stroke="#C9A66B" stroke-width="1" fill="rgba(201,166,107,.05)"/><path d="M138 60 Q148 73 163 68 Q166 56 160 44" stroke="#C9A66B" stroke-width="1" fill="rgba(201,166,107,.05)"/></g>
+            <g id="sp5" opacity=".14" style="transition:opacity .7s;"><path d="M183 36 Q188 16 183 12 Q176 18 181 28" stroke="#C9A66B" stroke-width="1" fill="none" opacity=".8"/><path d="M193 32 Q200 12 196 8 Q190 14 194 24" stroke="#C9A66B" stroke-width="1" fill="none" opacity=".5"/></g>
+            <text id="spt" x="120" y="94" text-anchor="middle" fill="rgba(201,166,107,.2)" font-size="7.5" font-family="serif" letter-spacing="1">스탬프를 모아 완성하세요</text>
+          </svg>
+        </div>
+        <div class="stamp-rows">
+          <div class="srow" id="srow0"><div class="sbadge ul" id="sbadge0"><svg width="18" height="18" viewBox="0 0 26 14" fill="none"><path d="M2 8Q5 2 13 4Q20 1 24 7Q25 9 22 11Q16 14 8 12Q2 10 2 9Z" stroke="#C9A66B" stroke-width="1.2" fill="rgba(201,166,107,.2)"/></svg></div><div class="sinf"><div class="sn">① 울주 암각화박물관</div><div class="sd">입장 시 안내데스크 수령 — <em>꼬리 조각</em></div></div><div class="schk on" id="schk0">✓</div></div>
+          <div class="srow" id="srow1"><div class="sbadge lk" id="sbadge1"><svg width="18" height="18" viewBox="0 0 52 30" fill="none"><path d="M3 15Q13 4 30 8Q44 3 50 14Q52 21 43 25Q28 32 14 26Q4 23 3 16Z" stroke="#C9A66B" stroke-width="1.2" fill="rgba(201,166,107,.07)"/></svg></div><div class="sinf"><div class="sn">② 대곡천 탐방로</div><div class="sd">나무 팻말 뒷면 — <em>몸통 앞 조각</em></div></div><div class="schk" id="schk1">○</div></div>
+          <div class="srow" id="srow2"><div class="sbadge lk" id="sbadge2"><svg width="18" height="18" viewBox="0 0 50 34" fill="none"><path d="M6 18Q8 9 20 7Q32 3 42 11Q48 17 44 24Q38 32 24 30Q9 28 6 20Z" stroke="#C9A66B" stroke-width="1.2" fill="rgba(201,166,107,.07)"/></svg></div><div class="sinf"><div class="sn">③ 반구대 전망대</div><div class="sd">망원경 옆 스탬프 박스 — <em>몸통+눈 조각</em></div></div><div class="schk" id="schk2">○</div></div>
+          <div class="srow" id="srow3"><div class="sbadge lk" id="sbadge3"><svg width="18" height="18" viewBox="0 0 48 36" fill="none"><rect x="8" y="8" width="32" height="24" rx="1.5" stroke="#C9A66B" stroke-width="1" fill="rgba(201,166,107,.06)"/><path d="M14 20Q24 12 34 20" stroke="#C9A66B" stroke-width="1.2" fill="none"/></svg></div><div class="sinf"><div class="sn">④ 탁본 체험장</div><div class="sd">탁본 완료 후 스태프 수령 — <em>머리 조각</em></div></div><div class="schk" id="schk3">○</div></div>
+          <div class="srow" id="srow4"><div class="sbadge lk" id="sbadge4"><svg width="18" height="18" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="10" stroke="#C9A66B" stroke-width="1" fill="rgba(201,166,107,.06)"/><path d="M20 10V14M20 26V30M10 20H14M26 20H30" stroke="#C9A66B" stroke-width="1"/></svg></div><div class="sinf"><div class="sn">⑤ AR 체험 완료</div><div class="sd">도상 3개 이상 스캔 후 자동 발급 — <em>지느러미 조각</em></div></div><div class="schk" id="schk4">○</div></div>
+          <div class="srow" id="srow5"><div class="sbadge lk" id="sbadge5"><svg width="18" height="18" viewBox="0 0 50 38" fill="none"><path d="M4 26Q13 16 26 18Q38 13 46 22Q48 28 41 32Q28 38 13 34Q4 31 4 27Z" stroke="#C9A66B" stroke-width="1.2" fill="rgba(201,166,107,.07)"/><path d="M28 16Q26 9 22 3M28 16Q30 7 34 2" stroke="#C9A66B" stroke-width=".8" opacity=".6"/></svg></div><div class="sinf"><div class="sn">⑥ 천전리 각석</div><div class="sd">방명록 작성 후 수령 — <em>물줄기+마지막 조각</em></div></div><div class="schk" id="schk5">○</div></div>
+        </div>
+        <div style="margin-top:12px;">
+          <div class="s-prog"><div class="s-progf" id="stamp-prog" style="width:16.6%"></div></div>
+          <div class="s-progt"><span id="stamp-count">1 / 6 완료</span><span style="color:rgba(201,166,107,.28);" id="stamp-msg">그림 완성까지 5개 남음</span></div>
+        </div>
+        <button class="stamp-demo" onclick="demoStamp()">스탬프 채우기 (데모) →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ S11 오시는 길 ════ -->
+<section id="s11" class="fs">
+  <div class="s11-inner">
+    <div class="sh rv">
+      <span class="sh-lbl">오시는 길</span>
+      <div class="sh-tit" style="font-size:24px;">울산광역시 울주군 언양읍</div>
+      <div class="sh-rule"></div>
+    </div>
+    <div class="access-cols rv">
+      <div class="ac"><div class="ac-t">대중교통</div><div class="acr"><span class="ack">버스</span><span class="acv">언양터미널 → 반구대 직행 (328번)</span></div><div class="acr"><span class="ack">KTX</span><span class="acv">울산역 → 언양 버스 환승 (약 40분)</span></div></div>
+      <div class="ac"><div class="ac-t">자가용</div><div class="acr"><span class="ack">경부고속도</span><span class="acv">언양 IC → 24번 국도 → 약 15분</span></div><div class="acr"><span class="ack">주차</span><span class="acv">박물관 앞 무료 주차장</span></div></div>
+      <div class="ac"><div class="ac-t">관람 안내</div><div class="acr"><span class="ack">하절기</span><span class="acv">3~10월 09:00–18:00</span></div><div class="acr"><span class="ack">동절기</span><span class="acv">11~2월 09:00–17:00</span></div><div class="acr"><span class="ack">휴관</span><span class="acv">매주 월요일 · 1월 1일</span></div><div class="acr"><span class="ack">입장료</span><span class="acv">성인 2,000원 / 울산시민 무료</span></div></div>
+    </div>
+    <div class="cs-bar rv">
+      <div style="display:flex;gap:24px;">
+        <div><div class="csl">고객센터</div><div class="csn"><span class="csi">☎</span>052-229-4797</div></div>
+        <div><div class="csl">팩스</div><div class="csn"><span class="csi">✆</span>052-229-4798</div></div>
+      </div>
+      <div>
+        <div style="font-size:8px;font-weight:200;color:var(--mu);letter-spacing:.14em;margin-bottom:7px;">협력기관</div>
+        <div class="pts"><div class="pti">울산광역시</div><div class="pti">문화재청</div><div class="pti">한국지질자원연구원</div><div class="pti">울주군청</div><div class="pti">KIGAM</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fb2">반구대 암각화</div>
+  <div class="fi2">울산광역시 울주군 언양읍 반구대안길 285 · TEL 052-229-4797<br>© 반구대 암각화 체험 웹사이트 · 교육 목적 시뮬레이션</div>
+  <div class="fm2">Bangudae ✦ 2024</div>
+</footer>
+
+<script>
+/* ════════════════════
+   공통
+════════════════════ */
+const C1=document.getElementById('cur'),C2=document.getElementById('cur2');
+document.addEventListener('mousemove',e=>{
+  C1.style.left=e.clientX+'px';C1.style.top=e.clientY+'px';
+  C2.style.left=e.clientX+'px';C2.style.top=e.clientY+'px';
+},{passive:true});
+document.querySelectorAll('a,button,.drag-card,.tool-card,.qa-item,.srow,.jt').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{C1.style.width='12px';C1.style.height='12px';C2.style.width='40px';C2.style.height='40px';});
+  el.addEventListener('mouseleave',()=>{C1.style.width='7px';C1.style.height='7px';C2.style.width='24px';C2.style.height='24px';});
+});
+
+/* 파티클 */
+const ptc=document.getElementById('ptc');
+for(let i=0;i<10;i++){const p=document.createElement('div');p.className='p';const s=Math.random()*2+1;p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;animation-duration:${(Math.random()*14+12).toFixed(1)}s;animation-delay:${(Math.random()*10).toFixed(1)}s;`;ptc.appendChild(p);}
+
+/* NAV 스크롤 */
+const navEl=document.getElementById('nav');
+const secIds=['s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11'];
+window.addEventListener('scroll',()=>{
+  navEl.classList.toggle('on',scrollY>50);
+  secIds.forEach(id=>{const el=document.getElementById(id);if(!el)return;const r=el.getBoundingClientRect();if(r.top<=60&&r.bottom>60)document.querySelectorAll('.nr a').forEach(a=>{a.classList.toggle('on',a.getAttribute('href')==='#'+id);});});
+},{passive:true});
+
+/* Reveal */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');}),{threshold:.06});
+document.querySelectorAll('.rv,.rv-l,.rv-r').forEach(el=>io.observe(el));
+
+/* S02 탭 */
+function swTab(btn,id){
+  document.querySelectorAll('.s2t').forEach(t=>{t.classList.remove('on');});btn.classList.add('on');
+  ['tc','tv','th'].forEach(i=>{const el=document.getElementById(i);if(el)el.classList.toggle('on',i===id);});
+}
+
+/* ════════════════════
+   S03 글로우 해독
+════════════════════ */
+const GD=[
+  {id:0,g:'sea',x:.16,y:.30,svg:`<svg width="168" height="78" viewBox="0 0 168 78" fill="none"><path d="M7 43Q27 13 70 21Q113 7 147 25Q161 17 165 35Q167 47 155 53Q117 65 67 57Q23 61 9 47Z" stroke="#C9A66B" stroke-width="2.2" fill="rgba(201,166,107,.13)"/><path d="M165 35Q173 41 169 53" stroke="#C9A66B" stroke-width="1.8" fill="none"/><path d="M63 55Q77 71 89 61" stroke="#C9A66B" stroke-width="1.6" fill="none"/><circle cx="151" cy="25" r="4.5" fill="#C9A66B" opacity=".9"/></svg>`,q:'이 암각화는 무엇일까요?',choices:['귀신고래','혹등고래','범고래','상어'],answer:0,desc:'세계 최초의 고래 사냥 기록. 7,000년 전 선사인은 귀신고래의 회유 경로까지 파악하고 있었습니다.'},
+  {id:1,g:'sea',x:.52,y:.20,svg:`<svg width="148" height="90" viewBox="0 0 148 90" fill="none"><path d="M9 57Q37 27 73 37Q107 21 131 39Q139 31 141 47Q143 57 131 63Q95 77 53 67Q15 69 11 59Z" stroke="#C9A66B" stroke-width="2" fill="rgba(201,166,107,.11)"/><path d="M81 35Q77 19 69 7M81 35Q85 17 93 5" stroke="#C9A66B" stroke-width="1.4" fill="none" opacity=".85"/><circle cx="125" cy="39" r="3.5" fill="#C9A66B" opacity=".85"/></svg>`,q:'숨구멍에서 물을 뿜는 이 도상은?',choices:['분기고래','귀신고래','돌고래','참고래'],answer:0,desc:'물줄기를 두 갈래로 뿜는 장면이 정밀하게 묘사. 현대 고래 연구자들도 놀라는 관찰력입니다.'},
+  {id:2,g:'sea',x:.80,y:.36,svg:`<svg width="153" height="73" viewBox="0 0 153 73" fill="none"><path d="M5 37Q19 13 49 19Q81 7 109 17Q129 11 137 25Q141 33 135 41Q111 53 69 49Q29 51 7 41Z" stroke="#C9A66B" stroke-width="2" fill="rgba(201,166,107,.11)"/><path d="M137 25Q143 21 145 29Q143 37 137 33" stroke="#C9A66B" stroke-width="1.5" fill="none"/><line x1="55" y1="11" x2="91" y2="19" stroke="#C9A66B" stroke-width="1.1" stroke-dasharray="4,3" opacity=".55"/><polygon points="55,7 51,13 59,13" fill="#C9A66B" opacity=".55"/></svg>`,q:'작살이 꽂힌 이 장면은?',choices:['고래 포획 장면','물고기 떼','바다거북','뱃놀이'],answer:0,desc:'작살과 고래, 사냥꾼이 한 화면에. 세계 최초의 포경 기록입니다.'},
+  {id:3,g:'land',x:.12,y:.60,svg:`<svg width="148" height="102" viewBox="0 0 148 102" fill="none"><path d="M15 55Q21 25 61 17Q101 7 125 31Q143 47 135 71Q119 91 71 89Q23 89 15 59Z" stroke="#C9A66B" stroke-width="2" fill="rgba(201,166,107,.11)"/><path d="M125 31Q143 17 147 35Q143 51 125 43" stroke="#C9A66B" stroke-width="1.6" fill="none"/><path d="M39 85 L33 101 M71 89 L71 105 M99 85 L105 101" stroke="#C9A66B" stroke-width="1.4"/><path d="M61 17 L55 1 M77 13 L75 -1 M93 11 L95 -1" stroke="#C9A66B" stroke-width="1" opacity=".7"/><path d="M83 43 L89 59 M99 37 L107 53" stroke="#C9A66B" stroke-width=".8" opacity=".42"/><circle cx="117" cy="35" r="4" fill="#C9A66B" opacity=".88"/></svg>`,q:'이 네 발 짐승은 무엇일까요?',choices:['호랑이','사슴','멧돼지','곰'],answer:0,desc:'줄무늬, 꼬리, 완전한 측면 묘사. 위협적 맹수는 항상 옆모습으로 기억됩니다.'},
+  {id:4,g:'land',x:.42,y:.66,svg:`<svg width="118" height="118" viewBox="0 0 118 118" fill="none"><ellipse cx="59" cy="70" rx="43" ry="31" stroke="#C9A66B" stroke-width="2" fill="rgba(201,166,107,.11)"/><line x1="59" y1="39" x2="59" y2="19" stroke="#C9A66B" stroke-width="1.8"/><ellipse cx="59" cy="11" rx="15" ry="11" stroke="#C9A66B" stroke-width="1.6" fill="rgba(201,166,107,.08)"/><path d="M51 3L43 -7M67 3L75 -7" stroke="#C9A66B" stroke-width="1.3"/><path d="M43 -7 L37 -15 M75 -7 L81 -15" stroke="#C9A66B" stroke-width="1.1"/><path d="M23 98L17 116 M43 102L41 118 M75 102L77 118 M95 98L101 116" stroke="#C9A66B" stroke-width="1.4"/><circle cx="51" cy="9" r="3.2" fill="#C9A66B" opacity=".8"/><circle cx="67" cy="9" r="3.2" fill="#C9A66B" opacity=".8"/></svg>`,q:'큰 뿔, 두 눈이 보이는 이 동물은?',choices:['사슴','노루','호랑이','멧돼지'],answer:0,desc:'정면에 가까운 각도, 두 눈이 모두 보임. 선사인의 사냥감은 항상 이렇게 묘사됩니다.'},
+  {id:5,g:'land',x:.70,y:.70,svg:`<svg width="142" height="92" viewBox="0 0 142 92" fill="none"><path d="M17 55Q21 27 55 19Q89 9 117 29Q137 43 131 65Q117 85 67 83Q21 83 17 59Z" stroke="#C9A66B" stroke-width="2" fill="rgba(201,166,107,.11)"/><path d="M117 29Q135 17 139 29Q135 43 117 37" stroke="#C9A66B" stroke-width="1.6" fill="none"/><path d="M117 59 L121 77 M31 79 L27 93 M67 83 L67 93" stroke="#C9A66B" stroke-width="1.4"/><circle cx="111" cy="33" r="3.5" fill="#C9A66B" opacity=".82"/></svg>`,q:'뭉툭한 주둥이의 이 짐승은?',choices:['멧돼지','곰','사슴','호랑이'],answer:0,desc:'짧은 다리, 두꺼운 몸통, 뭉툭한 주둥이. 멧돼지의 정밀한 관찰입니다.'},
+  {id:6,g:'human',x:.26,y:.46,svg:`<svg width="83" height="138" viewBox="0 0 83 138" fill="none"><ellipse cx="41" cy="17" rx="13" ry="13" stroke="#C9A66B" stroke-width="1.8" fill="rgba(201,166,107,.11)"/><line x1="41" y1="30" x2="41" y2="76" stroke="#C9A66B" stroke-width="1.8"/><path d="M41 51 L15 69 M41 51 L67 69" stroke="#C9A66B" stroke-width="1.8"/><line x1="41" y1="76" x2="25" y2="116" stroke="#C9A66B" stroke-width="1.8"/><line x1="41" y1="76" x2="57" y2="116" stroke="#C9A66B" stroke-width="1.8"/><path d="M65 39 Q81 49 65 65" stroke="#C9A66B" stroke-width="1.7" fill="none"/><line x1="65" y1="39" x2="7" y2="55" stroke="#C9A66B" stroke-width="1.5"/><polygon points="7,51 3,57 11,57" fill="#C9A66B" opacity=".72"/></svg>`,q:'활을 든 이 인물은?',choices:['활 든 사냥꾼','어부','부족장','제사장'],answer:0,desc:'활과 화살을 든 성인 남성의 역동적 자세. 선사시대 수렵 활동의 핵심 도상입니다.'},
+  {id:7,g:'human',x:.56,y:.53,svg:`<svg width="152" height="98" viewBox="0 0 152 98" fill="none"><path d="M7 29Q13 13 25 17 L143 29Q149 33 143 37 L7 29Q1 25 7 29Z" stroke="#C9A66B" stroke-width="1.6" fill="rgba(201,166,107,.07)"/><path d="M7 71Q1 81 5 87 L143 73Q149 69 143 65 L7 71Z" stroke="#C9A66B" stroke-width="1.6" fill="rgba(201,166,107,.07)"/><path d="M7 29L7 71 M33 31L33 69 M59 31L59 69 M85 29L85 71 M111 29L111 71 M137 29L137 73 M143 29L143 73" stroke="#C9A66B" stroke-width="1.2"/><path d="M7 43L143 39 M7 57L143 53" stroke="#C9A66B" stroke-width=".85" opacity=".6"/></svg>`,q:'이 격자 도상은 무엇일까요?',choices:['어로 그물','울타리','집','달력'],answer:0,desc:'집단 투망 어업의 증거. 이미 역할 분담이 존재했음을 보여줍니다.'},
+  {id:8,g:'human',x:.84,y:.57,svg:`<svg width="142" height="108" viewBox="0 0 142 108" fill="none"><ellipse cx="35" cy="19" rx="12" ry="12" stroke="#C9A66B" stroke-width="1.7" fill="rgba(201,166,107,.11)"/><line x1="35" y1="31" x2="35" y2="68" stroke="#C9A66B" stroke-width="1.7"/><path d="M35 47 L13 61 M35 47 L57 61" stroke="#C9A66B" stroke-width="1.7"/><line x1="35" y1="68" x2="23" y2="96" stroke="#C9A66B" stroke-width="1.7"/><line x1="35" y1="68" x2="47" y2="96" stroke="#C9A66B" stroke-width="1.7"/><ellipse cx="107" cy="25" rx="12" ry="12" stroke="#C9A66B" stroke-width="1.7" fill="rgba(201,166,107,.11)"/><line x1="107" y1="37" x2="107" y2="74" stroke="#C9A66B" stroke-width="1.7"/><path d="M107 53 L85 65 M107 53 L129 65" stroke="#C9A66B" stroke-width="1.7"/><line x1="107" y1="74" x2="95" y2="102" stroke="#C9A66B" stroke-width="1.7"/><line x1="107" y1="74" x2="119" y2="102" stroke="#C9A66B" stroke-width="1.7"/><path d="M57 61 Q71 57 85 65" stroke="#C9A66B" stroke-width="1.1" stroke-dasharray="4,3" opacity=".6"/></svg>`,q:'두 인물이 함께하는 이 장면은?',choices:['집단 사냥 장면','두 친구','이주 장면','의식 장면'],answer:0,desc:'두 사냥꾼의 협력. 반구대에서 인물은 항상 무리 지어 등장합니다.'},
+];
+const CHAP={
+  sea:{ey:'🌊 바다 계열 클리어',ti:'바다를 읽은<br><em>사람들</em>',bd:'귀신고래, 분기고래, 포획 장면. 선사인은 고래의 호흡법과 회유 경로까지 꿰뚫고 있었습니다. 세 도상은 단순한 그림이 아니라 세계 최초의 포경 매뉴얼입니다. 7,000년 전 인류는 이미 바다를 체계적으로 관찰했습니다.'},
+  land:{ey:'🏔 산 계열 클리어',ti:'두 세계의<br><em>경계</em>',bd:'호랑이는 완전 측면, 사슴은 정면에 가깝게. 맹수는 위협으로, 먹잇감은 사냥 대상으로 — 선사인의 인식 체계가 그대로 새겨져 있습니다. 이것은 현대 인지심리학이 증명하는 본능적 시각 패턴과 정확히 일치합니다.'},
+  human:{ey:'🏹 사람 계열 클리어',ti:'집단으로<br><em>살아남다</em>',bd:'사냥꾼, 그물, 집단 사냥. 개인이 아닌 집단의 협력, 역할의 분담. 반구대는 이것이 7,000년 전부터 존재했음을 증명합니다.'},
+};
+/* 글로우 캔버스 */
+const gcv=document.getElementById('gc'),gctx=gcv.getContext('2d');
+let gmx=0,gmy=0;const gtr=[];const GTMAX=30;
+const gsolved=new Set(),gdone={sea:0,land:0,human:0},gclear={sea:false,land:false,human:false};
+let gselId=null;const gels={};
+function grsz(){
+  const s3=document.getElementById('s3');
+  gcv.width=s3.offsetWidth;gcv.height=s3.offsetHeight;
+}
+grsz();window.addEventListener('resize',grsz);
+function gdraw(){
+  gctx.clearRect(0,0,gcv.width,gcv.height);
+  gtr.forEach((pt,i)=>{const a=(i/GTMAX)*pt.life;const r=110+(i/GTMAX)*75;const g=gctx.createRadialGradient(pt.x,pt.y,0,pt.x,pt.y,r);g.addColorStop(0,`rgba(201,166,107,${a*.32})`);g.addColorStop(.45,`rgba(201,166,107,${a*.12})`);g.addColorStop(1,'transparent');gctx.fillStyle=g;gctx.fillRect(pt.x-r,pt.y-r,r*2,r*2);});
+  gsolved.forEach(id=>{const d=GD[id];const x=d.x*gcv.width,y=d.y*gcv.height,r=190;const g=gctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,'rgba(201,166,107,.22)');g.addColorStop(.5,'rgba(201,166,107,.08)');g.addColorStop(1,'transparent');gctx.fillStyle=g;gctx.fillRect(x-r,y-r,r*2,r*2);});
+  if(gselId!==null&&!gsolved.has(gselId)){const d=GD[gselId];const x=d.x*gcv.width,y=d.y*gcv.height,r=210;const g=gctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,'rgba(201,166,107,.28)');g.addColorStop(.5,'rgba(201,166,107,.11)');g.addColorStop(1,'transparent');gctx.fillStyle=g;gctx.fillRect(x-r,y-r,r*2,r*2);}
+  requestAnimationFrame(gdraw);
+}
+gdraw();
+setInterval(()=>{for(let i=gtr.length-1;i>=0;i--){gtr[i].life-=.05;if(gtr[i].life<=0)gtr.splice(i,1);}},28);
+const s3el=document.getElementById('s3');
+s3el.addEventListener('mousemove',e=>{
+  const r=s3el.getBoundingClientRect();
+  gmx=e.clientX-r.left;gmy=e.clientY-r.top;
+  gtr.push({x:gmx,y:gmy,life:1});if(gtr.length>GTMAX)gtr.shift();
+  GD.forEach(d=>{const el=gels[d.id];if(!el)return;const gx=d.x*gcv.width,gy=d.y*gcv.height;const dist=Math.hypot(gmx-gx,gmy-gy);if(dist<115&&!gsolved.has(d.id))el.classList.add('hover');else if(gselId!==d.id&&!gsolved.has(d.id))el.classList.remove('hover');});
+});
+const gscene=document.getElementById('gscene');
+GD.forEach(d=>{const el=document.createElement('div');el.className='glyph';el.style.left=(d.x*100)+'%';el.style.top=(d.y*100)+'%';el.innerHTML=d.svg;el.addEventListener('click',()=>openQ(d.id,el));gscene.appendChild(el);gels[d.id]=el;});
+function openQ(id,el){
+  if(gsolved.has(id))return;gselId=id;const d=GD[id];
+  Object.values(gels).forEach(e=>e.classList.remove('hover'));el.classList.add('hover');
+  const pop=document.getElementById('qpop');
+  const s3r=s3el.getBoundingClientRect();
+  const gx=d.x*gcv.width,gy=d.y*gcv.height;
+  const W=274,barH=54;
+  let px=gx+130>gcv.width-W?gx-W-16:gx+130;
+  let py=Math.max(56,Math.min(gy-90,gcv.height-310-barH));
+  pop.style.left=px+'px';pop.style.top=py+'px';
+  document.getElementById('qtag').textContent=d.g==='sea'?'Chapter. 바다':d.g==='land'?'Chapter. 산':'Chapter. 사람';
+  document.getElementById('qq').textContent=d.q;
+  document.getElementById('qfb').className='qp-fb';document.getElementById('qfb').innerHTML='';
+  const list=document.getElementById('qlist');list.innerHTML='';
+  const LB=['A.','B.','C.','D.'];
+  d.choices.forEach((ch,i)=>{const b=document.createElement('button');b.className='qpc';b.innerHTML=`<span class="ci">${LB[i]}</span>${ch}`;b.onclick=()=>chkQ(id,i);list.appendChild(b);});
+  pop.classList.add('show');
+  document.getElementById('g-hint').classList.add('off');
+}
+function chkQ(id,idx){
+  const d=GD[id];const btns=document.querySelectorAll('.qpc');const fb=document.getElementById('qfb');
+  btns.forEach(b=>b.classList.add('disabled'));
+  if(idx===d.answer){
+    btns[idx].classList.add('correct');fb.innerHTML=`<strong style="color:#7acc88;font-weight:300;">정답 ✓</strong><br>${d.desc}`;fb.classList.add('show');
+    gsolved.add(id);gels[id].classList.remove('hover');gels[id].classList.add('solved');
+    gdone[d.g]++;updGBar();updGPr();
+    setTimeout(()=>{closeQ();if(gdone[d.g]===3&&!gclear[d.g]){gclear[d.g]=true;setTimeout(()=>showCover(d.g),450);}},2100);
+  }else{btns[idx].classList.add('wrong');fb.innerHTML=`<span style="color:rgba(200,80,80,.65);">오답입니다. 다시 살펴보세요.</span>`;fb.classList.add('show');btns.forEach((b,i)=>{if(i!==idx)b.classList.remove('disabled');});}
+}
+function closeQ(){document.getElementById('qpop').classList.remove('show');if(gselId!==null){if(!gsolved.has(gselId))gels[gselId]?.classList.remove('hover');gselId=null;}}
+function updGBar(){
+  ['sea','land','human'].forEach(g=>{for(let i=0;i<3;i++){const d=document.getElementById(`gbd-${g}-${i}`);if(!d)return;d.classList.remove('done','clear');if(gclear[g])d.classList.add('clear');else if(i<gdone[g])d.classList.add('done');}const bb=document.getElementById(`gbb-${g}`);if(bb&&gclear[g])bb.classList.add('show');});
+  if(gclear.sea&&gclear.land&&gclear.human)document.getElementById('gnext').classList.add('on');
+}
+function updGPr(){document.getElementById('g-pr').textContent=`${gsolved.size} / 9 해독`;}
+function showCover(g){
+  const c=CHAP[g];document.getElementById('cv-ey').textContent=c.ey;
+  document.getElementById('cv-ti').innerHTML=c.ti;document.getElementById('cv-bd').textContent=c.bd;
+  const anim=document.getElementById('cv-anim');anim.innerHTML='';
+  if(g==='sea')anim.innerHTML=`<svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 640 420" fill="none"><g class="wave1" opacity=".16"><path d="M-20 310Q60 290 120 310Q180 330 240 310Q300 290 360 310Q420 330 480 310Q540 290 660 310" stroke="#C9A66B" stroke-width="1.4" fill="none"/></g><g class="whale-swim"><path d="M90 205Q132 163 198 173Q266 153 320 170Q352 160 364 180Q368 192 358 200Q322 215 248 207Q174 212 98 209Z" stroke="#C9A66B" stroke-width="2.8" fill="rgba(201,166,107,.16)"/><path d="M364 180Q376 172 378 188Q375 200 364 193" stroke="#C9A66B" stroke-width="2.2" fill="none"/><path d="M234 204Q250 224 266 212" stroke="#C9A66B" stroke-width="2" fill="none"/><circle cx="354" cy="170" r="5.5" fill="#C9A66B" opacity=".92"/></g><circle cx="185" cy="158" r="3.5" fill="rgba(201,166,107,.45)" style="animation:bub 3.5s ease infinite;"/><circle cx="218" cy="148" r="2.5" fill="rgba(201,166,107,.35)" style="animation:bub 3.5s ease infinite;animation-delay:.9s;"/></svg>`;
+  else if(g==='land')anim.innerHTML=`<svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 640 420" fill="none"><path d="M0 390L110 190L230 290L350 130L470 230L640 160L640 420L0 420Z" fill="rgba(201,166,107,.035)"/><g class="leaf-sw" style="transform-origin:310px 96px;" opacity=".4"><path d="M290 80Q310 44 330 80Q310 102 290 80Z" stroke="#C9A66B" stroke-width="1.1" fill="rgba(201,166,107,.07)"/></g><g class="tiger-walk"><path d="M170 242Q178 210 214 202Q250 192 272 208Q288 200 292 218Q294 228 286 236Q262 250 226 244Q184 248 172 246Z" stroke="#C9A66B" stroke-width="2.2" fill="rgba(201,166,107,.13)"/><path d="M292 218Q304 210 306 222Q304 232 292 226" stroke="#C9A66B" stroke-width="1.8" fill="none"/><circle cx="280" cy="214" r="4.5" fill="#C9A66B" opacity=".9"/></g></svg>`;
+  else anim.innerHTML=`<svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 640 420" fill="none"><g class="h-wind"><ellipse cx="195" cy="128" rx="15" ry="15" stroke="#C9A66B" stroke-width="2" fill="rgba(201,166,107,.12)"/><line x1="195" y1="143" x2="195" y2="196" stroke="#C9A66B" stroke-width="2"/><path d="M195 166L165 184M195 166L225 184" stroke="#C9A66B" stroke-width="2"/><line x1="195" y1="196" x2="177" y2="238" stroke="#C9A66B" stroke-width="2"/><line x1="195" y1="196" x2="213" y2="238" stroke="#C9A66B" stroke-width="2"/><path d="M223 148Q243 160 223 178" stroke="#C9A66B" stroke-width="1.8" fill="none"/><line x1="223" y1="148" x2="157" y2="165" stroke="#C9A66B" stroke-width="1.6"/></g><g class="sp-fly" style="transform-origin:355px 200px;"><line x1="355" y1="200" x2="460" y2="158" stroke="#C9A66B" stroke-width="1.8"/><polygon points="460,154 467,161 455,163" fill="#C9A66B" opacity=".82"/></g></svg>`;
+  document.getElementById('cover').classList.add('show');
+}
+function closeCover(){document.getElementById('cover').classList.remove('show');}
+
+/* ════════════════════
+   S04 드래그 인터랙션
+════════════════════ */
+const zones={threat:[],hunt:[]};
+function dc(e){e.dataTransfer.setData('text/plain',JSON.stringify({name:e.currentTarget.dataset.name,type:e.currentTarget.dataset.type}));}
+function dropC(e,zk){e.preventDefault();const d=JSON.parse(e.dataTransfer.getData('text/plain'));if(!zones[zk].find(c=>c.name===d.name))zones[zk].push(d);renderZones();updLife();}
+function renderZones(){['threat','hunt'].forEach(zk=>{const el=document.getElementById('dz-'+zk);if(!el)return;el.innerHTML=zones[zk].map(c=>`<div class="dz-chip" onclick="rmCard('${zk}','${c.name}')" title="제거">${c.name} ✕</div>`).join('');});}
+function rmCard(zk,n){zones[zk]=zones[zk].filter(c=>c.name!==n);renderZones();updLife();}
+function updLife(){
+  const t=zones.threat.length,h=zones.hunt.length;
+  const el=document.getElementById('life-scene'),txt=document.getElementById('scene-txt'),res=document.getElementById('ch2-res');
+  if(t===0&&h===0){txt.style.color='rgba(160,152,128,.45)';txt.textContent='도상을 배치하면 선사인의 생활 모습이 달라집니다';if(res)res.textContent='아직 배치하지 않았습니다.';}
+  else if(t>0&&h===0){el.style.borderColor='rgba(192,80,80,.3)';txt.style.color='rgba(192,80,80,.7)';txt.style.fontStyle='normal';txt.textContent='온통 위협입니다. 부족은 거점을 자주 옮기며 동굴에 숨어 지냅니다. 불을 밝혀 맹수를 쫓고, 아이들은 무리의 중심에 보호됩니다.';if(res)res.textContent=`맹수 ${t}종만 배치 — 위협이 우세한 환경`;}
+  else if(t===0&&h>0){el.style.borderColor='rgba(74,154,88,.3)';txt.style.color='rgba(74,154,88,.7)';txt.style.fontStyle='normal';txt.textContent='풍요로운 사냥터입니다. 부족은 한 자리에 정착해 오두막을 짓습니다. 사슴과 물고기가 넘쳐 저장 창고도 만들어집니다.';if(res)res.textContent=`먹잇감 ${h}종만 배치 — 풍요로운 환경`;}
+  else{el.style.borderColor='rgba(201,166,107,.2)';txt.style.color='rgba(201,166,107,.65)';txt.style.fontStyle='normal';txt.textContent='균형 잡힌 생태계입니다. 부족은 계절에 따라 이동과 정착을 반복합니다. 맹수를 피하는 법과 먹잇감을 쫓는 법을 모두 알고 있습니다.';if(res)res.textContent=`맹수 ${t}종 + 먹잇감 ${h}종 — 균형 잡힌 생태계`;}
+}
+function resetZones(){zones.threat=[];zones.hunt=[];renderZones();updLife();}
+document.querySelectorAll('.drop-zone').forEach(z=>{z.addEventListener('dragover',()=>z.classList.add('over'));z.addEventListener('dragleave',()=>z.classList.remove('over'));z.addEventListener('drop',()=>z.classList.remove('over'));});
+
+const hunters=[null,null,null];
+const TN={bow:'활과 화살',spear:'창',net:'그물',torch:'횃불'};
+const TSVG={bow:`<svg width="20" height="20" viewBox="0 0 32 32" fill="none"><path d="M8 4Q18 8 24 16Q18 24 8 28" stroke="#C9A66B" stroke-width="1.4" fill="none"/><line x1="8" y1="4" x2="8" y2="28" stroke="#C9A66B" stroke-width="1"/><line x1="8" y1="16" x2="26" y2="14" stroke="#C9A66B" stroke-width=".9" stroke-dasharray="3,2"/><polygon points="26,12 30,14 26,16" fill="#C9A66B" opacity=".7"/></svg>`,spear:`<svg width="20" height="20" viewBox="0 0 32 32" fill="none"><line x1="4" y1="28" x2="24" y2="8" stroke="#C9A66B" stroke-width="1.4"/><polygon points="24,6 28,10 22,12" fill="#C9A66B" opacity=".8"/></svg>`,net:`<svg width="20" height="20" viewBox="0 0 32 32" fill="none"><path d="M4 8L28 8M4 16L28 16M4 24L28 24M8 4L8 28M16 4L16 28M24 4L24 28" stroke="#C9A66B" stroke-width=".9" opacity=".7"/><rect x="4" y="4" width="24" height="24" stroke="#C9A66B" stroke-width="1.2" fill="none"/></svg>`,torch:`<svg width="20" height="20" viewBox="0 0 32 32" fill="none"><line x1="16" y1="28" x2="16" y2="14" stroke="#C9A66B" stroke-width="1.4"/><path d="M10 14Q16 4 22 14Q18 18 16 14Q14 18 10 14Z" stroke="#C9A66B" stroke-width="1" fill="rgba(201,166,107,.15)"/></svg>`};
+function td(e){e.dataTransfer.setData('text/plain',e.currentTarget.dataset.tool);}
+function toolDrop(e,i){e.preventDefault();const tool=e.dataTransfer.getData('text/plain');hunters[i]=tool;renderHunters();updHunt();}
+function renderHunters(){hunters.forEach((tool,i)=>{const hz=document.getElementById('hz-'+i);const ht=document.getElementById('ht-'+i);if(!ht)return;if(tool){ht.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;" onclick="clrH(${i})" title="제거">${TSVG[tool]}<span style="font-size:7.5px;">${TN[tool]}</span></div>`;ht.className='hzt s';if(hz)hz.classList.add('set');}else{ht.innerHTML='— 미배정 —';ht.className='hzt';if(hz)hz.classList.remove('set');}});}
+function clrH(i){hunters[i]=null;renderHunters();updHunt();}
+function updHunt(){
+  const as=hunters.filter(Boolean);const u=new Set(as).size;
+  const el=document.getElementById('hunt-result'),txt=document.getElementById('hunt-txt'),r3=document.getElementById('ch3-res');
+  if(as.length===0){txt.style.color='rgba(160,152,128,.45)';txt.textContent='도구를 배분하면 사냥 결과가 바뀝니다';if(r3)r3.textContent='아직 배분하지 않았습니다.';}
+  else if(as.length===3&&u===3){el.style.borderColor='rgba(74,154,88,.3)';txt.style.color='rgba(74,154,88,.75)';txt.style.fontStyle='normal';txt.textContent='🎯 완벽한 분업입니다. 활잡이가 고래를 유인하고, 창잡이가 근접 투척하고, 그물잡이가 마무리합니다. 사냥 성공 — 부족 전체가 먹을 분량을 확보했습니다.';if(r3)r3.textContent='활·창·그물 완벽 분업 — 사냥 성공! 🎯';}
+  else if(u>=2){el.style.borderColor='rgba(201,166,107,.2)';txt.style.color='rgba(201,166,107,.65)';txt.style.fontStyle='normal';txt.textContent='✓ 적절한 배분입니다. 두 가지 역할이 협력해 사냥을 완수했습니다.';if(r3)r3.textContent=`${as.map(t=>TN[t]).join(' · ')} — 부분 성공`;}
+  else{el.style.borderColor='rgba(201,166,107,.12)';txt.style.color='rgba(201,166,107,.4)';txt.style.fontStyle='normal';txt.textContent='△ 같은 도구가 중복됩니다. 역할을 다양하게 나눠보세요.';if(r3)r3.textContent='역할 중복 — 효율 저하';}
+}
+document.querySelectorAll('.hz').forEach(z=>{z.addEventListener('dragover',()=>z.classList.add('over'));z.addEventListener('dragleave',()=>z.classList.remove('over'));z.addEventListener('drop',()=>z.classList.remove('over'));});
+function resetHunters(){hunters.fill(null);renderHunters();updHunt();}
+function swCh(btn,id){
+  document.querySelectorAll('.cht').forEach(t=>t.classList.remove('on'));btn.classList.add('on');
+  document.querySelectorAll('.ch-content').forEach(c=>c.classList.remove('on'));
+  document.getElementById(id)?.classList.add('on');
+}
+
+/* ════════════════════
+   S07 수위 시뮬레이터
+════════════════════ */
+function uDam(v){
+  const p=((v-44)/(53-44))*100;
+  document.getElementById('gwt').style.height=p+'%';
+  document.getElementById('dnum').textContent=parseFloat(v).toFixed(1);
+  document.getElementById('dsl').style.background=`linear-gradient(to right,var(--gold) 0%,var(--gold) ${p}%,rgba(201,166,107,.1) ${p}%)`;
+  const ds=document.getElementById('dstat'),ce=document.getElementById('cvexp');
+  if(v<46){ds.className='dam-st st-ok';ds.textContent='최적 관람';ce.style.color='#4a9a58';ce.textContent='90% 이상 노출';}
+  else if(v<49){ds.className='dam-st st-warn';ds.textContent='관람 가능 (부분 노출)';ce.style.color='var(--gold)';ce.textContent=Math.round(100-(v-44)*8)+'% 노출';}
+  else{ds.className='dam-st st-bad';ds.textContent='수몰 (관람 어려움)';ce.style.color='#c05050';ce.textContent='20% 미만 노출';}
+}
+
+/* ════════════════════
+   S08 단서 추적
+════════════════════ */
+let curStep='start';
+const stepOrder=['start',0,1,2,3,4,'answer'];
+const stepDots=['sd-start','sd0','sd1','sd2','sd3','sd4','sd-answer'];
+function goStep(t){
+  document.getElementById('screen-'+curStep).style.display='none';
+  if(t===-1){const i=stepOrder.indexOf(curStep);t=stepOrder[i-1];}
+  curStep=t;
+  const el=document.getElementById('screen-'+t);if(el)el.style.display='block';
+  const idx=stepOrder.indexOf(t);
+  stepDots.forEach((id,i)=>{const d=document.getElementById(id);if(!d)return;d.className=i<idx?'sdot done':i===idx?'sdot on':'sdot';});
+}
+function chkAns2(){
+  const inp=document.getElementById('answer-input').value.trim();
+  const fb=document.getElementById('answer-feedback');
+  const ok=['반구대 암각화','반구대암각화','반구대','bangudae'];
+  const isOk=ok.some(a=>inp.toLowerCase().replace(/\s/g,'').includes(a.toLowerCase().replace(/\s/g,'')));
+  fb.style.display='block';
+  if(isOk){fb.style.cssText='display:block;padding:13px;background:rgba(74,154,88,.1);border:1px solid rgba(74,154,88,.25);';fb.innerHTML=`<div style="font-size:12px;font-weight:400;color:#4a9a58;margin-bottom:6px;">🎉 정답입니다!</div><div style="font-size:11px;font-weight:200;color:var(--mu);line-height:1.9;"><strong style="color:var(--tp2);font-weight:400;">반구대 암각화</strong>가 맞습니다!<br>울주 암각화박물관 1층 안내데스크에서 <strong style="color:var(--gold);font-weight:300;">기념 탁본 세트</strong>를 수령하세요.</div>`;}
+  else if(inp.length===0){fb.style.cssText='display:block;padding:12px;background:rgba(201,166,107,.06);border:1px solid rgba(201,166,107,.14);';fb.innerHTML='<div style="font-size:11px;font-weight:200;color:var(--mu);">정답을 입력해주세요.</div>';}
+  else{fb.style.cssText='display:block;padding:12px;background:rgba(192,80,80,.07);border:1px solid rgba(192,80,80,.2);';fb.innerHTML='<div style="font-size:11px;font-weight:200;color:rgba(192,80,80,.7);margin-bottom:4px;">오답입니다</div><div style="font-size:11px;font-weight:200;color:var(--mu);line-height:1.9;">단서 핀을 더 확인해보세요!</div>';}
+}
+
+/* ════════════════════
+   스탬프 시스템
+════════════════════ */
+let stampState=[true,false,false,false,false,false];let demoIdx=1;
+function applyStamps(){
+  const msgs=['그림 완성까지 5개 남음','그림 완성까지 4개 남음','그림 완성까지 3개 남음','그림 완성까지 2개 남음','마지막 조각 하나 남았어요!','🎉 귀신고래 완성!'];
+  let cnt=stampState.filter(Boolean).length;
+  stampState.forEach((on,i)=>{
+    const b=document.getElementById('sbadge'+i);const c=document.getElementById('schk'+i);const p=document.getElementById('sp'+i);
+    if(on){if(c){c.textContent='✓';c.classList.add('on');}if(b){b.classList.remove('lk');b.classList.add('ul');}if(p)p.style.opacity='.85';}
+  });
+  const prog=document.getElementById('stamp-prog');if(prog)prog.style.width=(cnt/6*100)+'%';
+  const sc=document.getElementById('stamp-count');if(sc)sc.textContent=cnt+' / 6 완료';
+  const sm=document.getElementById('stamp-msg');if(sm)sm.textContent=msgs[cnt-1]||'';
+  const spt=document.getElementById('spt');if(spt&&cnt===6){spt.textContent='반구대 암각화 귀신고래 완성!';spt.setAttribute('fill','rgba(201,166,107,.7)');}
+}
+function demoStamp(){if(demoIdx<6){stampState[demoIdx]=true;demoIdx++;applyStamps();}}
+applyStamps();
+
+/* 방명록 */
+function addGb(btn){
+  const n=document.getElementById('gbn').value.trim();const m=document.getElementById('gbm').value.trim();
+  if(!n||!m)return;
+  const e=document.createElement('div');e.className='gbe';
+  e.innerHTML=`<div class="gben">${n} · 방금</div><div class="gbem">${m}</div>`;
+  document.getElementById('gbe').prepend(e);
+  document.getElementById('gbn').value='';document.getElementById('gbm').value='';
+  btn.textContent='✓ 기록되었습니다';setTimeout(()=>btn.textContent='방명록 남기기 →',2500);
+}
+</script>
+</body>
+</html>
